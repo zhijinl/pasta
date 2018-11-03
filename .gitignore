@@ -1,0 +1,63 @@
+
+.DS_Store
+
+# Compiled Object files
+*.slo
+*.lo
+*.o
+*.obj
+
+# Precompiled Headers
+*.gch
+*.pch
+
+# Compiled Dynamic libraries
+*.so
+*.dylib
+*.dll
+
+# Compiled Static libraries
+*.lai
+*.la
+*.a
+*.lib
+
+# Executables
+*.exe
+*.out
+*.app
+*.o
+*.pasta
+*.test
+
+# Temp files
+/autom4te.cache
+*~
+*.tmp
+
+# Projectile TAG
+TAGS
+
+# Autotools generated files
+Makefile.in
+build_info.hh.in
+*.mk
+*.lst
+aclocal.m4
+configure
+compile
+*.guess
+*.sub
+depcomp
+install-sh
+libtool.m4
+ltmain.sh
+ltoptions.m4
+ltsugar.m4
+ltversion.m4
+lt~obsolete.m4
+missing
+INSTALL
+
+# html
+*.html
