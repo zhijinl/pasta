@@ -35,16 +35,16 @@
 // E-mail:   <jonathan.zj.lee@gmail.com>
 //
 // Started on  Thu Nov  1 23:02:50 2018 Zhijin Li
-// Last update Thu Nov  1 23:02:53 2018 Zhijin Li
+// Last update Mon Nov  5 23:13:10 2018 Zhijin Li
 // ---------------------------------------------------------------------------
 
 
 #ifndef PASTA_DISTRIBUTIONS_HH
 # define PASTA_DISTRIBUTIONS_HH
 
-# include "distributions/RUniform.hh"
-# include "distributions/Poisson.hh"
-# include "distributions/Gaussian.hh"
-# include "distributions/Bernoulli.hh"
+# include "pasta/Distributions/RUniform.hh"
+# include "pasta/Distributions/Poisson.hh"
+# include "pasta/Distributions/Gaussian.hh"
+# include "pasta/Distributions/Bernoulli.hh"
 
 #endif //!PASTA_DISTRIBUTIONS_HH

@@ -35,7 +35,7 @@
 // E-mail:   <jonathan.zj.lee@gmail.com>
 //
 // Started on  Fri Nov  2 15:47:44 2018 Zhijin Li
-// Last update Sat Nov  3 22:41:03 2018 Zhijin Li
+// Last update Mon Nov  5 23:47:41 2018 Zhijin Li
 // ---------------------------------------------------------------------------
 
 
@@ -55,8 +55,7 @@ namespace pasta
       template<typename EXACT> template<typename MT>
       void distrbase<EXACT>::draw(MT &&structure) const
       {
-        static_assert(is_eigen_v<MT>,
-                      "ERROR: EXPECTS EIGEN TYPE INPUT.");
+        static_assert(is_eigen_v<MT>, "ERROR: EXPECTS EIGEN TYPE INPUT.");
         // for(int __n = 0; __n < structure.size(); __n++)
         //   *(structure.data() + __n) = draw();
         for(int __m = 0; __m < structure.rows(); __m++)
@@ -89,16 +88,24 @@ namespace pasta
         return (*this).exact();
       }
 
-      // =====================================================================
-#ifdef PST_NON_REPRODUCIBLE
-      template<typename EXACT>
-      uintptr_t distrbase<EXACT>::gen_uid() const
-      {
-        /// TODO: consider add time_of_moment to addr value.
-        return reinterpret_cast<uintptr_t>(&exact());
-      }
-#endif
-
     }
   }
+
+
+#ifndef PST_USE_SHARED_ENGINE
+  namespace utils
+  {
+    namespace detail
+    {
+
+      // =====================================================================
+      inline std::random_device& get_rnd_dev()
+      {
+        static std::random_device __rndd{};
+        return __rndd;
+      }
+    }
+  }
+#endif
+
 }

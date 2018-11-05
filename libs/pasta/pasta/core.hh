@@ -35,16 +35,16 @@
 // E-mail:   <jonathan.zj.lee@gmail.com>
 //
 // Started on  Thu Nov  1 23:03:10 2018 Zhijin Li
-// Last update Thu Nov  1 23:03:24 2018 Zhijin Li
+// Last update Mon Nov  5 23:14:31 2018 Zhijin Li
 // ---------------------------------------------------------------------------
 
 
 #ifndef PASTA_CORE_HH
 # define PASTA_CORE_HH
 
-# include "Core/roots.hh"
-# include "Core/defs.hh"
-# include "Core/meta.hh"
-# include "Core/visitors.hh"
+# include "pasta/Core/roots.hh"
+# include "pasta/Core/defs.hh"
+# include "pasta/Core/meta.hh"
+# include "pasta/Core/visitors.hh"
 
 #endif //!PASTA_CORE_HH

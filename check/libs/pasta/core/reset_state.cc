@@ -35,9 +35,11 @@
 // E-mail:   <jonathan.zj.lee@gmail.com>
 //
 // Started on  Fri Nov  2 17:28:02 2018 Zhijin Li
-// Last update Fri Nov  2 17:28:27 2018 Zhijin Li
+// Last update Mon Nov  5 23:52:25 2018 Zhijin Li
 // ---------------------------------------------------------------------------
 
+
+#define PST_USE_SHARED_ENGINE
 
 # include "pasta/core.hh"
 # include "pasta/utilities.hh"

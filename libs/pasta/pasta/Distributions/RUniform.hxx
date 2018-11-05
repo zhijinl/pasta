@@ -35,7 +35,7 @@
 // E-mail:   <jonathan.zj.lee@gmail.com>
 //
 // Started on  Fri Nov  2 15:54:50 2018 Zhijin Li
-// Last update Sat Nov  3 21:00:50 2018 Zhijin Li
+// Last update Mon Nov  5 23:46:08 2018 Zhijin Li
 // ---------------------------------------------------------------------------
 
 
@@ -55,10 +55,10 @@ namespace pasta
     // =====================================================================
     template<typename T>
     auto RUniform<T>::draw_impl() const -> value_t
-#ifdef PST_NON_REPRODUCIBLE
-    { return _distribution(this->_engine); };
-#else
+#ifdef PST_USE_SHARED_ENGINE
     { return _distribution(utils::shared_engine()); };
+#else
+    { return _distribution(this->_engine); };
 #endif
 
     // =====================================================================

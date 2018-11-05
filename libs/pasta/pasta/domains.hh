@@ -35,13 +35,13 @@
 // E-mail:   <jonathan.zj.lee@gmail.com>
 //
 // Started on  Fri Nov  2 21:44:06 2018 Zhijin Li
-// Last update Fri Nov  2 22:53:48 2018 Zhijin Li
+// Last update Mon Nov  5 23:14:31 2018 Zhijin Li
 // ---------------------------------------------------------------------------
 
 
 #ifndef PASTA_DOMAINS_HH
 # define PASTA_DOMAINS_HH
 
-# include "domains/DiscreteDom.hh"
+# include "pasta/Domains/DiscreteDom.hh"
 
 #endif //!PASTA_DOMAINS_HH

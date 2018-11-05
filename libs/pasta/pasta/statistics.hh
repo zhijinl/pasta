@@ -35,15 +35,15 @@
 // E-mail:   <jonathan.zj.lee@gmail.com>
 //
 // Started on  Thu Nov  1 23:03:39 2018 Zhijin Li
-// Last update Thu Nov  1 23:03:50 2018 Zhijin Li
+// Last update Mon Nov  5 23:14:30 2018 Zhijin Li
 // ---------------------------------------------------------------------------
 
 
 #ifndef PASTA_STATISTICS_HH
 # define PASTA_STATISTICS_HH
 
-# include "Statistics/StatsOps.hh"
-# include "Statistics/KernelSmooth.hh"
-# include "Statistics/Samplers.hh"
+# include "pasta/Statistics/StatsOps.hh"
+# include "pasta/Statistics/KernelSmooth.hh"
+# include "pasta/Statistics/Samplers.hh"
 
 #endif //!PASTA_STATISTICS_HH

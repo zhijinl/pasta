@@ -1,3 +1,8 @@
+2018-11-05  Zhijin Li  <jonathan.zj.lee@gmail.com>
+
+	* libs/pasta/pasta/Distributions/distrbase.hh: Fix random engine
+	seeding.
+
 2018-11-03  Zhijin Li  <jonathan.zj.lee@gmail.com>
 
 	* README.md: Refine README.m4

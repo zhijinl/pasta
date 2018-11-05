@@ -35,9 +35,11 @@
 // E-mail:   <jonathan.zj.lee@gmail.com>
 //
 // Started on  Fri Nov  2 17:31:11 2018 Zhijin Li
-// Last update Fri Nov  2 23:37:26 2018 Zhijin Li
+// Last update Mon Nov  5 23:51:49 2018 Zhijin Li
 // ---------------------------------------------------------------------------
 
+
+#define PST_USE_SHARED_ENGINE
 
 # include <chrono>
 # include <algorithm>
@@ -47,6 +49,7 @@
 
 
 template<typename T> using Vector = Eigen::Matrix<T,Eigen::Dynamic,1>;
+
 
 int main()
 {

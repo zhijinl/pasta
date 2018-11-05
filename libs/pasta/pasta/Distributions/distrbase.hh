@@ -35,7 +35,7 @@
 // E-mail:   <jonathan.zj.lee@gmail.com>
 //
 // Started on  Fri Nov  2 15:45:34 2018 Zhijin Li
-// Last update Sat Nov  3 21:00:10 2018 Zhijin Li
+// Last update Mon Nov  5 23:57:45 2018 Zhijin Li
 // ---------------------------------------------------------------------------
 
 
@@ -48,6 +48,21 @@
 
 namespace pasta
 {
+
+#ifndef PST_USE_SHARED_ENGINE
+  namespace utils
+  {
+    namespace detail
+    {
+      /// @brief Create thread-safe global random device.
+      ///
+      /// @return A `std::random_device object`.
+      ///
+      std::random_device& get_rnd_dev();
+    }
+  }
+#endif
+
 
   /// @defgroup group_stats Multivariate Statistics
   ///
@@ -151,10 +166,10 @@ namespace pasta
       protected:
 
         /// @brief Ctor. Protected to prevent instantiation.
-#ifdef PST_NON_REPRODUCIBLE
-        distrbase(): _engine( gen_uid() ) {};
-#else
+#ifdef PST_USE_SHARED_ENGINE
         distrbase() = default;
+#else
+        distrbase(): _engine(utils::detail::get_rnd_dev()()) {};
 #endif
 
         /// @brief Default copy ctor.
@@ -169,15 +184,14 @@ namespace pasta
         /// @brief Default move assignment operator.
         distrbase& operator=(distrbase &&rhs) = default;
 
-        /// @brief generate unique object id
-#ifdef PST_NON_REPRODUCIBLE
-        uintptr_t gen_uid() const;
+#ifndef PST_USE_SHARED_ENGINE
         mutable std::mt19937_64 _engine;
 #endif
       };
 
     } //!abstract
   } //!rnd
+
 } //!pasta
 
 
