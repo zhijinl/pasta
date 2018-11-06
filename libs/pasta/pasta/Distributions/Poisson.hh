@@ -35,7 +35,7 @@
 // E-mail:   <jonathan.zj.lee@gmail.com>
 //
 // Started on  Fri Nov  2 15:55:36 2018 Zhijin Li
-// Last update Sat Nov  3 21:01:15 2018 Zhijin Li
+// Last update Tue Nov  6 23:26:57 2018 Zhijin Li
 // ---------------------------------------------------------------------------
 
 
@@ -85,7 +85,7 @@ namespace pasta
     template<typename T> class Poisson
       : public abstract::distrbase<Poisson<T> >
     {
-      static_assert(std::is_integral<T>::value,
+      static_assert(std::is_integral_v<T>,
                     "ERROR: POISSON DISTR RETURN INTEGRAL TYPES.");
     public:
 
@@ -107,9 +107,17 @@ namespace pasta
       using parnt_t::reset_param;
 
       /// Ctor.
-      template<typename PT,
-               std::enable_if_t<std::is_arithmetic_v<PT> >* = nullptr>
-      explicit Poisson(PT mean);
+      ///
+      /// @param mean: mean of the Poisson distribution.
+      ///
+      explicit Poisson(scalr_t mean);
+
+      /// Ctor with specified random seed.
+      ///
+      /// @param mean: mean of the Poisson distribution.
+      /// @param seed: random seed.
+      ///
+      Poisson(scalr_t mean, unsigned seed);
 
       /// Default ctor.
       Poisson() = default;

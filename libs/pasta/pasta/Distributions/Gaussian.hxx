@@ -35,7 +35,7 @@
 // E-mail:   <jonathan.zj.lee@gmail.com>
 //
 // Started on  Fri Nov  2 15:52:09 2018 Zhijin Li
-// Last update Mon Nov  5 23:45:45 2018 Zhijin Li
+// Last update Tue Nov  6 23:39:49 2018 Zhijin Li
 // ---------------------------------------------------------------------------
 
 
@@ -46,11 +46,27 @@ namespace pasta
 
     // =====================================================================
     template<typename T>
-    template<typename... PT,
-             enable_if_all_t<std::is_arithmetic_v<PT>...>*>
-    Gaussian<T>::Gaussian(PT ...pars):
+    Gaussian<T>::Gaussian(scalr_t mu, scalr_t sigma):
       abstract::distrbase<Gaussian<T> >(),
-      _distribution(distr_t(pars...)) {}
+      _distribution(mu, sigma) {}
+
+    // =====================================================================
+    template<typename T>
+    Gaussian<T>::Gaussian(scalr_t mu, scalr_t sigma, unsigned seed):
+#ifdef PST_USE_SHARED_ENGINE
+      abstract::distrbase<Gaussian<T> >(),
+#else
+      abstract::distrbase<Gaussian<T> >(seed),
+#endif
+      _distribution(distr_t(mu, sigma))
+    {
+#ifdef PST_USE_SHARED_ENGINE
+      static_assert
+        (err_on_call_v<T>,
+         "RANDOM ENGINE IS SHARED: USE RESET_SHARED_ENGINE FOR \
+LESS ERROR-PRONE GLOBAL RESEEDING.");
+#endif
+    }
 
     // =====================================================================
     template<typename T>

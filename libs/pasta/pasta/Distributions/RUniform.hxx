@@ -35,7 +35,7 @@
 // E-mail:   <jonathan.zj.lee@gmail.com>
 //
 // Started on  Fri Nov  2 15:54:50 2018 Zhijin Li
-// Last update Mon Nov  5 23:46:08 2018 Zhijin Li
+// Last update Tue Nov  6 23:39:22 2018 Zhijin Li
 // ---------------------------------------------------------------------------
 
 
@@ -46,11 +46,27 @@ namespace pasta
 
     // =====================================================================
     template<typename T>
-    template<typename... PT,
-             enable_if_all_t<std::is_arithmetic_v<PT>...>*>
-    RUniform<T>::RUniform(PT ...pars):
+    RUniform<T>::RUniform(scalr_t lower, scalr_t upper):
       abstract::distrbase<RUniform<T> >(),
-      _distribution(pars...) {}
+      _distribution(lower, upper) {}
+
+    // =====================================================================
+    template<typename T>
+    RUniform<T>::RUniform(scalr_t lower, scalr_t upper, unsigned seed):
+#ifdef PST_USE_SHARED_ENGINE
+      abstract::distrbase<RUniform<T> >(),
+#else
+      abstract::distrbase<RUniform<T> >(seed),
+#endif
+      _distribution(lower, upper)
+    {
+#ifdef PST_USE_SHARED_ENGINE
+      static_assert
+        (err_on_call_v<T>,
+         "RANDOM ENGINE IS SHARED: USE RESET_SHARED_ENGINE FOR \
+LESS ERROR-PRONE GLOBAL RESEEDING.");
+#endif
+    }
 
     // =====================================================================
     template<typename T>

@@ -35,7 +35,7 @@
 // E-mail:   <jonathan.zj.lee@gmail.com>
 //
 // Started on  Thu Nov  1 23:06:31 2018 Zhijin Li
-// Last update Sat Nov  3 23:17:19 2018 Zhijin Li
+// Last update Tue Nov  6 23:42:38 2018 Zhijin Li
 // ---------------------------------------------------------------------------
 
 
@@ -84,6 +84,25 @@ namespace pasta
   ///
   template<typename ...Types>
   constexpr bool not_empty() { return sizeof...(Types) > 0; }
+
+
+  ///@{
+  /// @ingroup group_meta
+  ///
+  /// @brief Utility constexpr to be used with `static_assert`.
+  ///
+  /// Triggers compile time error when a template function
+  /// or class is initiated.
+  ///
+  /// @warn Valid only when the template parameter T is in
+  /// deduced. context.
+  ///
+  template<typename T>
+  struct err_on_call_t: std::false_type {};
+
+  template<typename T>
+  constexpr bool err_on_call_v = err_on_call_t<T>::value;
+  ///@}
 
 
   ///@{

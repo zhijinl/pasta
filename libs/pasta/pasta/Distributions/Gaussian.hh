@@ -35,7 +35,7 @@
 // E-mail:   <jonathan.zj.lee@gmail.com>
 //
 // Started on  Fri Nov  2 15:52:54 2018 Zhijin Li
-// Last update Sat Nov  3 21:00:24 2018 Zhijin Li
+// Last update Tue Nov  6 23:27:13 2018 Zhijin Li
 // ---------------------------------------------------------------------------
 
 
@@ -105,9 +105,19 @@ namespace pasta
       using parnt_t::reset_param;
 
       /// Ctor.
-      template<typename... PT,
-               enable_if_all_t<std::is_arithmetic_v<PT>...>* = nullptr>
-      explicit Gaussian(PT ...);
+      ///
+      /// @param mu: mean of the Gaussian distribution.
+      /// @param sigma: stddev of Gaussian distribution.
+      ///
+      Gaussian(scalr_t mu, scalr_t sigma);
+
+      /// Ctor with specified random seed.
+      ///
+      /// @param mu: mean of the Gaussian distribution.
+      /// @param sigma: stddev of Gaussian distribution.
+      /// @param seed: random seed.
+      ///
+      Gaussian(scalr_t mu, scalr_t sigma, unsigned seed);
 
       /// Dflt ctor.
       Gaussian() = default;

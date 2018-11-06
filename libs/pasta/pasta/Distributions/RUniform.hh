@@ -35,7 +35,7 @@
 // E-mail:   <jonathan.zj.lee@gmail.com>
 //
 // Started on  Fri Nov  2 15:48:39 2018 Zhijin Li
-// Last update Sat Nov  3 21:06:52 2018 Zhijin Li
+// Last update Tue Nov  6 23:22:50 2018 Zhijin Li
 // ---------------------------------------------------------------------------
 
 
@@ -106,10 +106,20 @@ namespace pasta
       using parnt_t::reset_state;
       using parnt_t::reset_param;
 
-      /// Ctor
-      template<typename... PT,
-               enable_if_all_t<std::is_arithmetic_v<PT>...>* = nullptr>
-      explicit RUniform(PT ...);
+      /// Ctor.
+      ///
+      /// @param lower: lower bound of the distribution (included).
+      /// @param upper: upper bound of the distribution (excluded).
+      ///
+      RUniform(scalr_t lower, scalr_t upper);
+
+      /// Ctor.
+      ///
+      /// @param lower: lower bound of the distribution (included).
+      /// @param upper: upper bound of the distribution (excluded).
+      /// @param seed: random seed.
+      ///
+      RUniform(scalr_t lower, scalr_t upper, unsigned seed);
 
       /// @brief Default ctor.
       RUniform() = default;

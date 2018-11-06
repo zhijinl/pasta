@@ -35,7 +35,7 @@
 // E-mail:   <jonathan.zj.lee@gmail.com>
 //
 // Started on  Fri Nov  2 15:55:17 2018 Zhijin Li
-// Last update Mon Nov  5 23:46:08 2018 Zhijin Li
+// Last update Tue Nov  6 23:39:40 2018 Zhijin Li
 // ---------------------------------------------------------------------------
 
 
@@ -46,10 +46,27 @@ namespace pasta
 
     // =====================================================================
     template<typename T>
-    template<typename PT, std::enable_if_t<std::is_arithmetic_v<PT> >*>
-    Poisson<T>::Poisson(PT mean):
+    Poisson<T>::Poisson(scalr_t mean):
       abstract::distrbase<Poisson<T> >(),
       _distribution(distr_t(mean)) {}
+
+    // =====================================================================
+    template<typename T>
+    Poisson<T>::Poisson(scalr_t mean, unsigned seed):
+#ifdef PST_USE_SHARED_ENGINE
+      abstract::distrbase<Poisson<T> >(),
+#else
+      abstract::distrbase<Poisson<T> >(seed),
+#endif
+      _distribution(distr_t(mean))
+    {
+#ifdef PST_USE_SHARED_ENGINE
+      static_assert
+        (err_on_call_v<T>,
+         "RANDOM ENGINE IS SHARED: USE RESET_SHARED_ENGINE FOR \
+LESS ERROR-PRONE GLOBAL RESEEDING.");
+#endif
+    }
 
     // =====================================================================
     template<typename T>

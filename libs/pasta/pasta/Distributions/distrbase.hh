@@ -35,7 +35,7 @@
 // E-mail:   <jonathan.zj.lee@gmail.com>
 //
 // Started on  Fri Nov  2 15:45:34 2018 Zhijin Li
-// Last update Mon Nov  5 23:57:45 2018 Zhijin Li
+// Last update Tue Nov  6 00:14:52 2018 Zhijin Li
 // ---------------------------------------------------------------------------
 
 
@@ -165,11 +165,20 @@ namespace pasta
 
       protected:
 
-        /// @brief Ctor. Protected to prevent instantiation.
 #ifdef PST_USE_SHARED_ENGINE
+        /// @brief Ctor. Protected to prevent instantiation.
         distrbase() = default;
 #else
+        /// @brief Ctor. Protected to prevent instantiation.
         distrbase(): _engine(utils::detail::get_rnd_dev()()) {};
+
+        /// @brief Ctor.
+        ///
+        /// Initialize the random engine with specified seed.
+        ///
+        /// @param seed: the input seed value.
+        ///
+        explicit distrbase(int seed): _engine(seed) {};
 #endif
 
         /// @brief Default copy ctor.
