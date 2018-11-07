@@ -35,7 +35,7 @@
 // E-mail:   <jonathan.zj.lee@gmail.com>
 //
 // Started on  Fri Nov  2 15:43:37 2018 Zhijin Li
-// Last update Sat Nov  3 22:45:58 2018 Zhijin Li
+// Last update Wed Nov  7 18:43:32 2018 Zhijin Li
 // ---------------------------------------------------------------------------
 
 
@@ -66,6 +66,7 @@ namespace pasta
         using sampl_t = typename specs_t::sampl_t;
 
       protected:
+
         /// Default ctor.
         samplersbase() = default;
 

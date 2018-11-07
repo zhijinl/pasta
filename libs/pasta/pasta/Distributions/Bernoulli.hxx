@@ -35,7 +35,7 @@
 // E-mail:   <jonathan.zj.lee@gmail.com>
 //
 // Started on  Fri Nov  2 15:54:16 2018 Zhijin Li
-// Last update Mon Nov  5 23:46:08 2018 Zhijin Li
+// Last update Wed Nov  7 21:11:52 2018 Zhijin Li
 // ---------------------------------------------------------------------------
 
 
@@ -44,14 +44,30 @@ namespace pasta
   namespace rnd
   {
     // =====================================================================
-    template<typename PT, std::enable_if_t<std::is_arithmetic_v<PT> >*>
-    Bernoulli::Bernoulli(PT p):
+    inline Bernoulli::Bernoulli(scalr_t pr):
+      abstract::distrbase<Bernoulli>(), _distribution(pr) {}
+
+    // =====================================================================
+#ifdef PST_USE_SHARED_RND_ENGINE
+    template<typename Seed>
+    Bernoulli::Bernoulli(scalr_t pr, Seed seed):
       abstract::distrbase<Bernoulli>(),
-      _distribution(distr_t(p)) {}
+      _distribution(pr)
+    {
+      static_assert
+        (err_on_call_v<Seed>,
+         "RANDOM ENGINE IS SHARED: USE RESET_SHARED_ENGINE FOR \
+LESS ERROR-PRONE GLOBAL RESEEDING.");
+    }
+#else
+    inline Bernoulli::Bernoulli(scalr_t pr, seed_t seed):
+      abstract::distrbase<Bernoulli>(seed),
+      _distribution(pr) {}
+#endif
 
     // =====================================================================
     inline auto Bernoulli::draw_impl() const -> value_t
-#ifdef PST_USE_SHARED_ENGINE
+#ifdef PST_USE_SHARED_RND_ENGINE
     { return _distribution(utils::shared_engine()); };
 #else
     { return _distribution(this->_engine); };

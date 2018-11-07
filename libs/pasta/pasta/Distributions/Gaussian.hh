@@ -35,7 +35,7 @@
 // E-mail:   <jonathan.zj.lee@gmail.com>
 //
 // Started on  Fri Nov  2 15:52:54 2018 Zhijin Li
-// Last update Tue Nov  6 23:27:13 2018 Zhijin Li
+// Last update Wed Nov  7 21:17:14 2018 Zhijin Li
 // ---------------------------------------------------------------------------
 
 
@@ -98,11 +98,16 @@ namespace pasta
       using parnt_t = abstract::distrbase<exact_t>;
       friend parnt_t;
 
+      using engine_t = typename parnt_t::engine_t;
+      using seed_t = typename parnt_t::seed_t;
+
       using parnt_t::draw;
       using parnt_t::distr_max;
       using parnt_t::operator();
+      using parnt_t::reset_seed;
       using parnt_t::reset_state;
       using parnt_t::reset_param;
+      using parnt_t::reset_state_with_seed;
 
       /// Ctor.
       ///
@@ -117,7 +122,7 @@ namespace pasta
       /// @param sigma: stddev of Gaussian distribution.
       /// @param seed: random seed.
       ///
-      Gaussian(scalr_t mu, scalr_t sigma, unsigned seed);
+      Gaussian(scalr_t mu, scalr_t sigma, seed_t seed);
 
       /// Dflt ctor.
       Gaussian() = default;

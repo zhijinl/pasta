@@ -35,7 +35,7 @@
 // E-mail:   <jonathan.zj.lee@gmail.com>
 //
 // Started on  Fri Nov  2 15:45:34 2018 Zhijin Li
-// Last update Tue Nov  6 00:14:52 2018 Zhijin Li
+// Last update Wed Nov  7 20:29:41 2018 Zhijin Li
 // ---------------------------------------------------------------------------
 
 
@@ -49,7 +49,7 @@
 namespace pasta
 {
 
-#ifndef PST_USE_SHARED_ENGINE
+#ifndef PST_USE_SHARED_RND_ENGINE
   namespace utils
   {
     namespace detail
@@ -94,7 +94,38 @@ namespace pasta
         using locat_t = typename specs_t::locat_t;
         using param_t = typename specs_t::param_t;
 
-      public:
+      protected:
+
+        using engine_t = std::mt19937_64;
+        using seed_t   = typename engine_t::result_type;
+
+#ifdef PST_USE_SHARED_RND_ENGINE
+        /// @brief Ctor.
+        distrbase() = default;
+#else
+        /// @brief Ctor.
+        distrbase(): _engine(utils::detail::get_rnd_dev()()) {};
+
+        /// @brief Ctor.
+        ///
+        /// Initialize the random engine with specified seed.
+        ///
+        /// @param seed: the input seed value.
+        ///
+        explicit distrbase(seed_t seed): _engine(seed) {};
+#endif
+
+        /// @brief Default copy ctor.
+        distrbase(const distrbase &rhs) = default;
+
+        /// @brief Default move ctor.
+        distrbase(distrbase &&rhs) = default;
+
+        /// @brief Default copy assignment operator.
+        distrbase& operator=(const distrbase &rhs) = default;
+
+        /// @brief Default move assignment operator.
+        distrbase& operator=(distrbase &&rhs) = default;
 
         /// @brief Draw a single value.
         ///
@@ -120,25 +151,76 @@ namespace pasta
         ///
         template<typename Matrix> Matrix draw(int rows=0, int cols=0) const;
 
-        /// @brief Reset state of the random distribuition: so that
-        /// next call to draw() is independent from the previous one.
+        /// @brief Reset the random seed.
         ///
-        /// @note For usual cases of simulations, you barely need
-        /// to use this function. It is **different from reseting the
-        /// random seed**, which is managed by the function
-        /// `pasta::utils::reset_shared_engine()`. In one stream of
-        /// simulations, it is rarely necessary to call this function.
+        /// Resetting random seed of a random variable is only
+        /// relevant when a global seeded shared engine is not used.
+        /// If a global engine is used, consider calling
+        /// `pasta::utils::reset_shared_engine()` to reset the random
+        /// seed.
         ///
-        /// @note In two use cases this function might be usefull:
-        /// - When you want to reproduce the same simulation results,
-        ///   consider combining this function with
-        ///   `pasta::utils::reset_shared_engine()`.
-        /// - When you want to simulate **another independent
-        ///   stream of values use the same distribution object**.
+        /// @warning Resetting random seed alone does guarantee
+        /// reproducing the same result for a random variable. This
+        /// is because some random distributions have cached internal
+        /// state. Successive calls of `draw()` in random variables
+        /// created from such distributions are dependent of one
+        /// another. In this case consider discarding the cached
+        /// internal state by calling `reset_state()`, or calling
+        /// `reset_state_with_seed()`, which calls `reset_state()`
+        /// internally.
+        ///
+        /// @param seed: new random seed.
+        /// @return Non-const reference to `*this`.
+        ///
+        EXACT& reset_seed(seed_t seed);
+
+        /// @brief Reset state of the random distribution, such that
+        /// the next call to draw() is independent from the previous one.
+        ///
+        /// Some random distributions such as `Gaussian` have internal
+        /// state random variables. In this case, successive calls to
+        /// `draw()` method of a random variable are **dpendent of one
+        /// another**. As a consequence, in the middle of one simulation
+        /// stream, resetting the random seed of a random variable
+        /// might not guarantee to reproduce the same result,
+        /// since the random variable continues using previously
+        /// cached internal state. Calling `reset_state()` discards
+        /// the internal state of a random variable, and resets the
+        /// internal state to default. In one simulation stream of a
+        /// random variable, resetting the random seed followed by
+        /// resetting its state guarantees the reproduction of the
+        /// same result.
+        ///
+        /// @warning This function is **different from reseting the
+        /// random seed**. In one stream of simulation, successively
+        /// calling this function is unneccessary and may significantly
+        /// slow down the simulation.
+        ///
+        /// @note In two use cases this function might be helpfull:
+        /// - When you want to reproduce the same results during one
+        ///   simulation stream from a random variable. In this case,
+        ///   reset the random seed before calling this function.
+        /// - For random distributions that have internal state,
+        ///   calling this function allows to simulate **another
+        ///   independent stream of values, use the same random
+        ///   variable object**.
         ///
         /// @return Non-const reference to `*this`.
         ///
         EXACT& reset_state();
+
+        /// @brief Reset the internal state of a random variable and
+        /// the random seed.
+        ///
+        /// It might be usefull for reproducible simulations with
+        /// random variables that have internal state.
+        ///
+        /// @param seed: new random seed.
+        /// @return Non-const reference to `*this`.
+        ///
+        /// @sa `reset_seed()`, `reset_state()`.
+        ///
+        EXACT& reset_state_with_seed(seed_t seed);
 
         /// @brief Reset parameters of the distribution.
         ///
@@ -163,38 +245,9 @@ namespace pasta
         scalr_t operator()(locat_t location) const
         { return exact().distr_val_at_impl(location); }
 
-      protected:
+#ifndef PST_USE_SHARED_RND_ENGINE
 
-#ifdef PST_USE_SHARED_ENGINE
-        /// @brief Ctor. Protected to prevent instantiation.
-        distrbase() = default;
-#else
-        /// @brief Ctor. Protected to prevent instantiation.
-        distrbase(): _engine(utils::detail::get_rnd_dev()()) {};
-
-        /// @brief Ctor.
-        ///
-        /// Initialize the random engine with specified seed.
-        ///
-        /// @param seed: the input seed value.
-        ///
-        explicit distrbase(int seed): _engine(seed) {};
-#endif
-
-        /// @brief Default copy ctor.
-        distrbase(const distrbase &rhs) = default;
-
-        /// @brief Default move ctor.
-        distrbase(distrbase &&rhs) = default;
-
-        /// @brief Default copy assignment operator.
-        distrbase& operator=(const distrbase &rhs) = default;
-
-        /// @brief Default move assignment operator.
-        distrbase& operator=(distrbase &&rhs) = default;
-
-#ifndef PST_USE_SHARED_ENGINE
-        mutable std::mt19937_64 _engine;
+        mutable engine_t _engine;
 #endif
       };
 

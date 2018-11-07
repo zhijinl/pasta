@@ -35,7 +35,7 @@
 // E-mail:   <jonathan.zj.lee@gmail.com>
 //
 // Started on  Thu Nov  1 23:06:31 2018 Zhijin Li
-// Last update Tue Nov  6 23:42:38 2018 Zhijin Li
+// Last update Wed Nov  7 21:08:17 2018 Zhijin Li
 // ---------------------------------------------------------------------------
 
 
@@ -94,14 +94,14 @@ namespace pasta
   /// Triggers compile time error when a template function
   /// or class is initiated.
   ///
-  /// @warn Valid only when the template parameter T is in
-  /// deduced. context.
+  /// @warning Valid only when the template parameter T is a
+  /// template parameter (not a specified type, like void).
   ///
-  template<typename T>
+  template<typename T, typename U>
   struct err_on_call_t: std::false_type {};
 
-  template<typename T>
-  constexpr bool err_on_call_v = err_on_call_t<T>::value;
+  template<typename T, typename U=T>
+  constexpr bool err_on_call_v = err_on_call_t<T,U>::value;
   ///@}
 
 

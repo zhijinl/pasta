@@ -35,7 +35,7 @@
 // E-mail:   <jonathan.zj.lee@gmail.com>
 //
 // Started on  Thu Nov  1 23:54:07 2018 Zhijin Li
-// Last update Sat Nov  3 22:30:45 2018 Zhijin Li
+// Last update Wed Nov  7 18:44:45 2018 Zhijin Li
 // ---------------------------------------------------------------------------
 
 
@@ -641,6 +641,7 @@ namespace pasta
 
       rnd::RUniform<scalr_t> _gen;
     };
+
 
     /// @ingroup group_stats
     ///

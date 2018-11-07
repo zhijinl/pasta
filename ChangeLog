@@ -1,3 +1,8 @@
+2018-11-07  Zhijin Li  <jonathan.zj.lee@gmail.com>
+
+	* libs/pasta/pasta/Distributions/distrbase.hh: Add reset for
+	random seed and state.
+
 2018-11-06  Zhijin Li  <jonathan.zj.lee@gmail.com>
 
 	* libs/pasta/pasta/Distributions/distrbase.hh: Add seeding to

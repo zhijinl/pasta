@@ -35,7 +35,7 @@
 // E-mail:   <jonathan.zj.lee@gmail.com>
 //
 // Started on  Fri Nov  2 15:47:44 2018 Zhijin Li
-// Last update Mon Nov  5 23:47:41 2018 Zhijin Li
+// Last update Wed Nov  7 21:28:54 2018 Zhijin Li
 // ---------------------------------------------------------------------------
 
 
@@ -49,7 +49,7 @@ namespace pasta
       // =====================================================================
       template<typename EXACT>
       auto distrbase<EXACT>::draw() const -> value_t
-      { return exact().draw_impl(); }
+      { return (*this).exact().draw_impl(); }
 
       // =====================================================================
       template<typename EXACT> template<typename MT>
@@ -73,10 +73,41 @@ namespace pasta
 
       // =====================================================================
       template<typename EXACT>
+      auto distrbase<EXACT>::reset_seed(seed_t seed) -> EXACT&
+      {
+#ifndef PST_USE_SHARED_RND_ENGINE
+        _engine.seed(seed);
+        return (*this).exact();
+#else
+        static_assert
+        (err_on_call_v<EXACT>,
+         "RANDOM ENGINE IS SHARED: USE RESET_SHARED_ENGINE FOR \
+LESS ERROR-PRONE GLOBAL RESEEDING.");
+#endif
+      }
+
+      // =====================================================================
+      template<typename EXACT>
       auto distrbase<EXACT>::reset_state() -> EXACT&
       {
-        exact()._distribution.reset();
+        (*this).exact()._distribution.reset();
         return (*this).exact();
+      }
+
+      // =====================================================================
+      template<typename EXACT>
+      auto distrbase<EXACT>::reset_state_with_seed(seed_t seed) -> EXACT&
+      {
+#ifndef PST_USE_SHARED_RND_ENGINE
+        (*this).exact().reset_state();
+        _engine.seed(seed);
+        return (*this).exact();
+#else
+        static_assert
+        (err_on_call_v<EXACT>,
+         "RANDOM ENGINE IS SHARED: USE RESET_SHARED_ENGINE FOR \
+LESS ERROR-PRONE GLOBAL RESEEDING.");
+#endif
       }
 
       // =====================================================================
@@ -92,7 +123,7 @@ namespace pasta
   }
 
 
-#ifndef PST_USE_SHARED_ENGINE
+#ifndef PST_USE_SHARED_RND_ENGINE
   namespace utils
   {
     namespace detail

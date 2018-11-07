@@ -35,7 +35,7 @@
 // E-mail:   <jonathan.zj.lee@gmail.com>
 //
 // Started on  Fri Nov  2 17:38:33 2018 Zhijin Li
-// Last update Fri Nov  2 17:38:34 2018 Zhijin Li
+// Last update Wed Nov  7 19:16:26 2018 Zhijin Li
 // ---------------------------------------------------------------------------
 
 
@@ -48,7 +48,6 @@ int main()
   /// Defs.
   using dtype = float;
   constexpr int dim = 3;
-  using Point = Eigen::Matrix<dtype,dim,1>;
 
 
   /// Create vectors for slicing:

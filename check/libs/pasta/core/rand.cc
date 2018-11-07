@@ -35,11 +35,11 @@
 // E-mail:   <jonathan.zj.lee@gmail.com>
 //
 // Started on  Fri Nov  2 17:31:11 2018 Zhijin Li
-// Last update Mon Nov  5 23:51:49 2018 Zhijin Li
+// Last update Wed Nov  7 18:34:31 2018 Zhijin Li
 // ---------------------------------------------------------------------------
 
 
-#define PST_USE_SHARED_ENGINE
+#define PST_USE_SHARED_RND_ENGINE
 
 # include <chrono>
 # include <algorithm>

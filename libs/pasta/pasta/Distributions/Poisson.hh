@@ -35,7 +35,7 @@
 // E-mail:   <jonathan.zj.lee@gmail.com>
 //
 // Started on  Fri Nov  2 15:55:36 2018 Zhijin Li
-// Last update Tue Nov  6 23:26:57 2018 Zhijin Li
+// Last update Wed Nov  7 21:17:21 2018 Zhijin Li
 // ---------------------------------------------------------------------------
 
 
@@ -100,11 +100,16 @@ namespace pasta
       using parnt_t = abstract::distrbase<exact_t>;
       friend parnt_t;
 
+      using engine_t = typename parnt_t::engine_t;
+      using seed_t = typename parnt_t::seed_t;
+
       using parnt_t::draw;
       using parnt_t::distr_max;
       using parnt_t::operator();
+      using parnt_t::reset_seed;
       using parnt_t::reset_state;
       using parnt_t::reset_param;
+      using parnt_t::reset_state_with_seed;
 
       /// Ctor.
       ///
@@ -117,7 +122,7 @@ namespace pasta
       /// @param mean: mean of the Poisson distribution.
       /// @param seed: random seed.
       ///
-      Poisson(scalr_t mean, unsigned seed);
+      Poisson(scalr_t mean, seed_t seed);
 
       /// Default ctor.
       Poisson() = default;
