@@ -1,3 +1,8 @@
+2018-11-08  Zhijin Li  <jonathan.zj.lee@gmail.com>
+
+	* libs/pasta/pasta/Core/meta.hh: Update enable_if_all_t
+	and enable_if_any_t impl to C++17.
+
 2018-11-07  Zhijin Li  <jonathan.zj.lee@gmail.com>
 
 	* libs/pasta/pasta/Distributions/distrbase.hh: Add reset for

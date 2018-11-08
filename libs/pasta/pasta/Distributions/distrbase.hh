@@ -35,7 +35,7 @@
 // E-mail:   <jonathan.zj.lee@gmail.com>
 //
 // Started on  Fri Nov  2 15:45:34 2018 Zhijin Li
-// Last update Wed Nov  7 20:29:41 2018 Zhijin Li
+// Last update Wed Nov  7 22:39:45 2018 Zhijin Li
 // ---------------------------------------------------------------------------
 
 
@@ -159,13 +159,13 @@ namespace pasta
         /// `pasta::utils::reset_shared_engine()` to reset the random
         /// seed.
         ///
-        /// @warning Resetting random seed alone does guarantee
+        /// @warning Resetting random seed alone does not guarantee
         /// reproducing the same result for a random variable. This
         /// is because some random distributions have cached internal
         /// state. Successive calls of `draw()` in random variables
         /// created from such distributions are dependent of one
         /// another. In this case consider discarding the cached
-        /// internal state by calling `reset_state()`, or calling
+        /// internal state by calling `reset_state()`, or by calling
         /// `reset_state_with_seed()`, which calls `reset_state()`
         /// internally.
         ///

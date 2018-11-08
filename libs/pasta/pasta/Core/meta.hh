@@ -35,7 +35,7 @@
 // E-mail:   <jonathan.zj.lee@gmail.com>
 //
 // Started on  Thu Nov  1 23:06:31 2018 Zhijin Li
-// Last update Wed Nov  7 21:08:17 2018 Zhijin Li
+// Last update Thu Nov  8 21:48:17 2018 Zhijin Li
 // ---------------------------------------------------------------------------
 
 
@@ -208,51 +208,25 @@ namespace pasta
   ///
   /// @brief `enable_if_all_t` and `enable_if_any_t`.
   ///
-  /// Multiple version of enable_if: this emulates
-  /// C++17 `std::conjunction` and `std::disjunction`.
-  ///
   /// @note They behaves exactly as their names indicate:
   /// `enable_if_all` bails out **right after the first false argument it
   /// encounters**, while `enable_if_any` bails out **right after the first
   /// true argument it encounters**.
   ///
-  /// For `seq_and_v` and `seq_or_v`:
-  /// @param Bs: a sequence of `bool`s.
-  /// @return Logical AND | OR on the bool sequence, respectively.
-  ///
-  /// For `enable_if_all_t` and `enable_if_any_t`:
   /// @param Bs: a sequence of `bool`s.
   /// @return `void` if the logical AND | OR stands, respectively.
   ///
-  template<bool...> struct seq_or: std::false_type {};
-
-  template<bool...> struct seq_and: std::true_type {};
-
-  template<bool B1, bool... Bs>
-  struct seq_or<B1,Bs...>:
-    std::conditional_t<B1,std::true_type,seq_or<Bs...> > {};
-
-  template<bool B1, bool... Bs>
-  struct seq_and<B1,Bs...>:
-    std::conditional_t<B1,seq_and<Bs...>,std::false_type> {};
-
-  template<bool... Bs> constexpr bool seq_and_v()
-  { return seq_and<Bs...>::value; }
-
-  template<bool... Bs> constexpr bool seq_or_v()
-  { return seq_or<Bs...>::value; }
+  template<bool... Bs>
+    using enable_if_any_t = std::enable_if_t
+    <std::disjunction_v
+     <std::conditional_t
+      <Bs, std::true_type, std::false_type>...> >;
 
   template<bool... Bs>
-  using enable_if_any = std::enable_if<seq_or<Bs...>::value>;
-
-  template<bool... Bs>
-  using enable_if_all = std::enable_if<seq_and<Bs...>::value>;
-
-  template<bool... Bs>
-  using enable_if_any_t = typename enable_if_any<Bs...>::type;
-
-  template<bool... Bs>
-  using enable_if_all_t = typename enable_if_all<Bs...>::type;
+  using enable_if_all_t = std::enable_if_t
+    <std::conjunction_v
+     <std::conditional_t
+      <Bs, std::true_type, std::false_type>...> >;
   ///@}
 
 
@@ -996,7 +970,7 @@ namespace pasta
     // A std::variant containing at least one matched ID is
     // considered true.
     static const bool value =
-      seq_or_v<(pst_id_is_v<Args,id>())...>();
+      std::disjunction_v<(pst_id_is_v<Args,id>())...>();
   };
 
   template<typename T, pst_id_list id>

@@ -35,7 +35,7 @@
 // E-mail:   <jonathan.zj.lee@gmail.com>
 //
 // Started on  Thu Nov  1 23:54:07 2018 Zhijin Li
-// Last update Wed Nov  7 18:44:45 2018 Zhijin Li
+// Last update Thu Nov  8 20:50:53 2018 Zhijin Li
 // ---------------------------------------------------------------------------
 
 
@@ -772,7 +772,7 @@ namespace pasta
       /// @param distr: the target distribution function.
       /// @param propo: the proposal density. If not specified, it will be
       /// default constructed from the `Proposal` template parameter. This
-      /// will failed of course if `Proposal` is not default constructible.
+      /// fails if `Proposal` is not default constructible.
       ///
       template<typename Distr, typename Propo=Proposal,
                enable_if_all_t
