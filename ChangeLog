@@ -1,3 +1,7 @@
+2018-11-09  Zhijin Li  <jonathan.zj.lee@gmail.com>
+
+	* configure.ac: Remove warnings for unneccessary parentheses.
+
 2018-11-08  Zhijin Li  <jonathan.zj.lee@gmail.com>
 
 	* libs/pasta/pasta/Core/meta.hh: Update enable_if_all_t

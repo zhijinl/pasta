@@ -33,7 +33,7 @@
 ## E-mail:   <jonathan.zj.lee@gmail.com>
 ##
 ## Started on  Fri Nov  2 16:57:16 2018 Zhijin Li
-## Last update Fri Nov  2 21:24:15 2018 Zhijin Li
+## Last update Fri Nov  9 23:06:12 2018 Zhijin Li
 ## ---------------------------------------------------------------------------
 
 
@@ -66,6 +66,7 @@ AX_CXX_COMPILE_STDCXX_17([noext],[mandatory])
 CXXFLAGS="-O3 -W -fomit-frame-pointer   \
           -Wall -Wextra -fopenmp -msse2 \
           -Wno-deprecated-declarations  \
+          -Wno-parentheses              \
           -DPASTA_BUILD"
 
 # Checks for programs.
