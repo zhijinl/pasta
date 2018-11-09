@@ -35,7 +35,7 @@
 // E-mail:   <jonathan.zj.lee@gmail.com>
 //
 // Started on  Fri Nov  2 15:30:25 2018 Zhijin Li
-// Last update Sat Nov  3 22:45:02 2018 Zhijin Li
+// Last update Fri Nov  9 23:18:51 2018 Zhijin Li
 // ---------------------------------------------------------------------------
 
 
@@ -67,13 +67,13 @@ namespace pasta
 
     template<typename Scalar, typename VT,
              enable_if_all_t<is_eigen_v<VT>,
-                             dim_dispatch_v<VT>()==1>* = nullptr>
+                             dim_dispatch_v<VT> == 1>* = nullptr>
     inline Scalar mean(VT &&);
 
     template<typename Scalar, typename MT,
              enable_if_all_t<is_eigen_v<MT>,
-                             dim_dispatch_v<MT>()!=1>* = nullptr>
-    inline auto mean(MT &&) -> Eigen::Matrix<Scalar,dim_dispatch_v<MT>(),1>;
+                             dim_dispatch_v<MT> != 1>* = nullptr>
+    inline auto mean(MT &&) -> Eigen::Matrix<Scalar,dim_dispatch_v<MT>,1>;
     ///@}
 
     ///@{
@@ -115,39 +115,39 @@ namespace pasta
 
     template<typename Scalar, typename VT,
              enable_if_all_t<is_eigen_v<VT>,
-                             dim_dispatch_v<VT>()==1>* = nullptr>
+                             dim_dispatch_v<VT> == 1>* = nullptr>
     inline Scalar var(VT &&);
 
     template<typename Scalar, typename VT,
              enable_if_all_t<is_eigen_v<VT>,
-                             dim_dispatch_v<VT>()==1>* = nullptr>
+                             dim_dispatch_v<VT> == 1>* = nullptr>
     inline Scalar var(VT &&, uncorrected_t corr);
 
     template<typename Scalar, typename VT,
              enable_if_all_t<is_eigen_v<VT>,
-                             dim_dispatch_v<VT>()==1>* = nullptr>
+                             dim_dispatch_v<VT> == 1>* = nullptr>
     inline Scalar var(VT &&, Scalar true_mean);
 
 
     template<typename Scalar, typename MT,
              enable_if_all_t<is_eigen_v<MT>,
-                             dim_dispatch_v<MT>()!=1>* = nullptr>
+                             dim_dispatch_v<MT> != 1>* = nullptr>
     inline auto var(MT &&)
-      -> Eigen::Matrix<Scalar, dim_dispatch_v<MT>(), dim_dispatch_v<MT>()>;
+      -> Eigen::Matrix<Scalar, dim_dispatch_v<MT>, dim_dispatch_v<MT> >;
 
     template<typename Scalar, typename MT,
              enable_if_all_t<is_eigen_v<MT>,
-                             dim_dispatch_v<MT>()!=1>* = nullptr>
+                             dim_dispatch_v<MT> !=1 >* = nullptr>
     inline auto var(MT &&, uncorrected_t corr)
-      -> Eigen::Matrix<Scalar, dim_dispatch_v<MT>(), dim_dispatch_v<MT>()>;
+      -> Eigen::Matrix<Scalar, dim_dispatch_v<MT>, dim_dispatch_v<MT> >;
 
     template<typename Scalar, typename MT, typename VT,
              enable_if_all_t<is_eigen_v<MT>,
                              is_eigen_v<VT>,
-                             dim_dispatch_v<VT>()==1,
-                             dim_dispatch_v<MT>()!=1>* = nullptr>
+                             dim_dispatch_v<VT> == 1,
+                             dim_dispatch_v<MT> != 1>* = nullptr>
     inline auto var(MT &&, VT &&true_mean)
-      -> Eigen::Matrix<Scalar, dim_dispatch_v<MT>(), dim_dispatch_v<MT>()>;
+      -> Eigen::Matrix<Scalar, dim_dispatch_v<MT>, dim_dispatch_v<MT> >;
     ///@}
 
     /// @ingroup group_stats
@@ -161,7 +161,7 @@ namespace pasta
     ///
     template<typename Inp, typename = std::enable_if_t<is_eigen_v<Inp> > >
     inline auto comp_histogram(Inp &&input, float bin_width, int bord_ext=0)
-      -> stats::EmpiricalStats<eigen_val_t<Inp>,dim_dispatch_v<Inp>(),int,1>;
+      -> stats::EmpiricalStats<eigen_val_t<Inp>,dim_dispatch_v<Inp>,int,1>;
 
   }
 }

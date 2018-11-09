@@ -35,7 +35,7 @@
 // E-mail:   <jonathan.zj.lee@gmail.com>
 //
 // Started on  Fri Nov  2 15:27:29 2018 Zhijin Li
-// Last update Sat Nov  3 23:33:14 2018 Zhijin Li
+// Last update Sat Nov 10 00:19:35 2018 Zhijin Li
 // ---------------------------------------------------------------------------
 
 
@@ -273,7 +273,7 @@ namespace pasta
     auto make_eigen_pt(TS ...args) -> Eigen::Matrix<T,sizeof...(TS),1>;
 
     template<typename T, typename Input,
-             typename = std::enable_if_t<is_eigen_vec_v<Input>()> >
+             typename = std::enable_if_t<is_eigen_vec_v<Input> > >
     auto make_eigen_pt(Input &&input)
       -> decltype(cast_to<T>(std::forward<Input>(input)));
 
@@ -299,12 +299,12 @@ namespace pasta
     ///
     template<typename T,
              enable_if_all_t<is_eigen_v<T>,
-                             dim_dispatch_v<T>()==1>* = nullptr>
+                             dim_dispatch_v<T> == 1>* = nullptr>
     auto elem_at(T &&input, int index) -> decltype(input(0));
 
     template<typename T,
              enable_if_all_t<is_eigen_v<T>,
-                             dim_dispatch_v<T>()!=1>* = nullptr>
+                             dim_dispatch_v<T> != 1>* = nullptr>
     auto elem_at(T &&input, int index) -> decltype(input.col(0));
     ///@}
 

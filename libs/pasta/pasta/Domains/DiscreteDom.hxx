@@ -35,7 +35,7 @@
 // E-mail:   <jonathan.zj.lee@gmail.com>
 //
 // Started on  Fri Nov  2 22:58:41 2018 Zhijin Li
-// Last update Fri Nov  2 23:03:35 2018 Zhijin Li
+// Last update Fri Nov  9 23:21:11 2018 Zhijin Li
 // ---------------------------------------------------------------------------
 
 
@@ -108,9 +108,9 @@ namespace pasta
     // =====================================================================
     template<typename Scalar, typename Data, typename Params>
     auto make_discrete_domain(Data && data, Params &&sizes, double scale)
-      -> dom::DiscreteDom<Scalar,dim_dispatch_v<Params>()>
+      -> dom::DiscreteDom<Scalar,dim_dispatch_v<Params> >
     {
-      constexpr int __dim = dim_dispatch_v<Params>();
+      constexpr int __dim = dim_dispatch_v<Params>;
 
       return dom::DiscreteDom<Scalar, __dim>
         ( utils::scale_bound

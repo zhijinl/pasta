@@ -35,7 +35,7 @@
 // E-mail:   <jonathan.zj.lee@gmail.com>
 //
 // Started on  Fri Nov  2 15:43:37 2018 Zhijin Li
-// Last update Wed Nov  7 18:43:32 2018 Zhijin Li
+// Last update Sat Nov 10 00:08:01 2018 Zhijin Li
 // ---------------------------------------------------------------------------
 
 
@@ -82,8 +82,8 @@ namespace pasta
         /// ordered
         ///
         template<typename Vector,
-                 enable_if_all_t<dim_dispatch_v<Vector>()==1,
-                                 is_eigen_dynamic_vec_v<Vector>()>* = nullptr>
+                 enable_if_all_t<dim_dispatch_v<Vector> == 1,
+                                 is_eigen_dynamic_vec_v<Vector> >* = nullptr>
         void draw(Vector &vec);
 
         /// Draw samples into an Eigen structure other than a dynamic vector.
@@ -91,7 +91,7 @@ namespace pasta
         /// @param structure: the input Eigen struct. **Must be col ordered**.
         ///
         template<typename Struct,
-                 enable_if_all_t<dim_dispatch_v<Struct>()!=1,
+                 enable_if_all_t<dim_dispatch_v<Struct> != 1,
                                  is_eigen_v<Struct> >* = nullptr>
         void draw(Struct &structure);
 

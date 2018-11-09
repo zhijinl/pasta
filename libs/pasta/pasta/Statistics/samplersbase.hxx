@@ -35,7 +35,7 @@
 // E-mail:   <jonathan.zj.lee@gmail.com>
 //
 // Started on  Fri Nov  2 15:43:52 2018 Zhijin Li
-// Last update Sat Nov  3 22:28:47 2018 Zhijin Li
+// Last update Sat Nov 10 00:07:55 2018 Zhijin Li
 // ---------------------------------------------------------------------------
 
 
@@ -53,8 +53,8 @@ namespace pasta
       // =====================================================================
       template<typename EXACT>
       template<typename Vector,
-               enable_if_all_t<dim_dispatch_v<Vector>()==1,
-                               is_eigen_dynamic_vec_v<Vector>()>*>
+               enable_if_all_t<dim_dispatch_v<Vector> == 1,
+                               is_eigen_dynamic_vec_v<Vector> >*>
       void samplersbase<EXACT>::draw(Vector &vec)
       {
         for(int __n = 0; __n < vec.size(); __n++)
@@ -64,7 +64,7 @@ namespace pasta
       // =====================================================================
       template<typename EXACT>
       template<typename Struct,
-               enable_if_all_t<dim_dispatch_v<Struct>()!=1,
+               enable_if_all_t<dim_dispatch_v<Struct> != 1,
                                is_eigen_v<Struct> >*>
       void samplersbase<EXACT>::draw(Struct &structure)
       {

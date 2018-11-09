@@ -35,7 +35,7 @@
 // E-mail:   <jonathan.zj.lee@gmail.com>
 //
 // Started on  Fri Nov  2 15:27:38 2018 Zhijin Li
-// Last update Sat Nov  3 23:31:56 2018 Zhijin Li
+// Last update Fri Nov  9 23:21:32 2018 Zhijin Li
 // ---------------------------------------------------------------------------
 
 
@@ -211,7 +211,7 @@ namespace pasta
 
     // =====================================================================
     template<typename T,
-             enable_if_all_t<is_eigen_v<T>, dim_dispatch_v<T>()==1>*>
+             enable_if_all_t<is_eigen_v<T>, dim_dispatch_v<T> == 1>*>
     inline auto elem_at(T &&input, int index) -> decltype(input(0))
     {
       return input(index);
@@ -219,7 +219,7 @@ namespace pasta
 
     // =====================================================================
     template<typename T,
-             enable_if_all_t<is_eigen_v<T>, dim_dispatch_v<T>()!=1>*>
+             enable_if_all_t<is_eigen_v<T>, dim_dispatch_v<T> != 1>*>
     inline auto elem_at(T &&input, int index) -> decltype(input.col(0))
     {
       return input.col(index);
@@ -286,7 +286,7 @@ namespace pasta
     auto bind_cols(const std::vector<Mat> &mat_vec)
       -> mutate_col_t<Mat,Eigen::Dynamic>
     {
-      constexpr int __dim = eigen_rows_v<Mat>();
+      constexpr int __dim = eigen_rows_v<Mat>;
 
       int __cols = 0;
       for(const auto &__el: mat_vec) __cols += __el.cols(); // Get size first.

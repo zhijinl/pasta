@@ -35,7 +35,7 @@
 // E-mail:   <jonathan.zj.lee@gmail.com>
 //
 // Started on  Fri Nov  2 15:28:38 2018 Zhijin Li
-// Last update Sat Nov  3 22:29:58 2018 Zhijin Li
+// Last update Thu Nov  8 22:16:52 2018 Zhijin Li
 // ---------------------------------------------------------------------------
 
 
@@ -122,8 +122,8 @@ namespace pasta
       template<typename PtMat, typename ValMat,
                enable_if_all_t<is_eigen_v<PtMat>,
                                is_eigen_v<ValMat>,
-                               eigen_rows_v<PtMat>()==DomDim,
-                               eigen_rows_v<ValMat>()==ValDim>* = nullptr>
+                               eigen_rows_v<PtMat> == DomDim,
+                               eigen_rows_v<ValMat> == ValDim>* = nullptr>
       EmpiricalStats(PtMat &&pt_matrix, ValMat &&estimates):
         _locations(pt_matrix), _statistic(estimates) {}
 

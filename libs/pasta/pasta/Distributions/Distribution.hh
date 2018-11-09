@@ -35,7 +35,7 @@
 // E-mail:   <jonathan.zj.lee@gmail.com>
 //
 // Started on  Fri Nov  2 16:00:15 2018 Zhijin Li
-// Last update Sat Nov  3 20:33:57 2018 Zhijin Li
+// Last update Fri Nov  9 23:22:04 2018 Zhijin Li
 // ---------------------------------------------------------------------------
 
 
@@ -148,7 +148,7 @@ namespace pasta
       /// **Eigen fixed size column vector expression**.
       ///
       template<typename Location,
-               typename = std::enable_if_t<dim_dispatch_v<Location>()==Dim> >
+               typename = std::enable_if_t<dim_dispatch_v<Location> == Dim> >
       scalr_t distr_val_at_impl(Location &&location) const;
 
       distr_t _distribution; //!< The current distribution function.

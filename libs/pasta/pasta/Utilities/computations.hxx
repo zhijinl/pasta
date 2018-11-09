@@ -35,7 +35,7 @@
 // E-mail:   <jonathan.zj.lee@gmail.com>
 //
 // Started on  Fri Nov  2 15:24:07 2018 Zhijin Li
-// Last update Sat Nov  3 23:32:32 2018 Zhijin Li
+// Last update Sat Nov 10 00:14:37 2018 Zhijin Li
 // ---------------------------------------------------------------------------
 
 
@@ -70,7 +70,7 @@ namespace pasta
     }
 
     // =====================================================================
-    template<typename T, std::enable_if_t<is_eigen_dynamic_vec_v<T>()>*>
+    template<typename T, std::enable_if_t<is_eigen_dynamic_vec_v<T> >*>
     int n_elem(T &&structure)
     {
       return std::forward<T>(structure).size();
@@ -78,7 +78,7 @@ namespace pasta
 
     // =====================================================================
     template<typename T,
-             enable_if_all_t<is_eigen_v<T>,!is_eigen_dynamic_vec_v<T>()>*>
+             enable_if_all_t<is_eigen_v<T>,!is_eigen_dynamic_vec_v<T> >*>
     int n_elem(T &&structure)
     {
       return std::forward<T>(structure).cols();
@@ -91,12 +91,12 @@ namespace pasta
                              is_eigen_v<ST> >*>
     inline int eigen_pos_indx(PT &&pos, BT &&bound, ST &&spacing)
     {
-      constexpr int __dim = eigen_rows_v<PT>();
-      static_assert(eigen_cols_v<BT>()==2,
+      constexpr int __dim = eigen_rows_v<PT>;
+      static_assert(eigen_cols_v<BT> == 2,
                     "ERROR: EXPECTS A BOUNDING BOX.");
-      static_assert(eigen_rows_v<BT>()==__dim,
+      static_assert(eigen_rows_v<BT> == __dim,
                     "ERROR: POINT AND BOUND DIMENSION MISMATCH.");
-      static_assert(eigen_rows_v<ST>()==__dim,
+      static_assert(eigen_rows_v<ST> == __dim,
                     "ERROR: SPACING AND BOUND DIMENSION MISMATCH.");
       static_assert(std::is_same_v<eigen_val_t<PT>, eigen_val_t<BT> >,
                     "ERROR: POINT AND BOUND VALUE TYPE MISMATCH.");
@@ -124,14 +124,14 @@ namespace pasta
 
     // =====================================================================
     template<typename AT, enable_if_all_t
-             <is_eigen_v<AT>, eigen_rows_v<AT>()==3>*>
+             <is_eigen_v<AT>, eigen_rows_v<AT> == 3>*>
     inline auto comp_rotmat(AT &&angles) -> rotmat_dispatch_t<AT>
     {
       constexpr int __dim = 3;
       using __scalr_t = eigen_val_t<AT>;
       using __rotmt_t = rotmat_dispatch_t<AT>;
 
-      static_assert(eigen_cols_v<AT>() == 1, "ERROR: EXPECTS A COL VEC.");
+      static_assert(eigen_cols_v<AT> == 1, "ERROR: EXPECTS A COL VEC.");
       static_assert(!std::is_integral_v<__scalr_t>,
                     "ERROR: INTEGRAL TYPE GIVE FOR FLOATING POINT COMPS.");
       __rotmt_t __tmp;
@@ -150,7 +150,7 @@ namespace pasta
 
     // =====================================================================
     template<typename AT, enable_if_all_t
-             <is_eigen_v<AT>, eigen_rows_v<AT>()==1>*>
+             <is_eigen_v<AT>, eigen_rows_v<AT> == 1>*>
     inline auto comp_rotmat(AT &&angle) -> rotmat_dispatch_t<AT>
     {
       static_assert(!std::is_integral_v<eigen_val_t<AT> >,
@@ -185,11 +185,11 @@ namespace pasta
 
     // =====================================================================
     template<typename MT, enable_if_all_t
-             <is_eigen_v<MT>, eigen_rows_v<MT>()==3>*>
+             <is_eigen_v<MT>, eigen_rows_v<MT> == 3>*>
     inline auto comp_rot_angles(MT &&rot_mat)
       -> mutate_col_t<eigen_mat_t<MT>,1>
     {
-      static_assert(eigen_rows_v<MT>() == eigen_cols_v<MT>(),
+      static_assert(eigen_rows_v<MT> == eigen_cols_v<MT>,
                     "ERROR: INPUT MUST BE 3 x 3 SQUARE MATRIX.");
 
       using __value_t = eigen_val_t<MT>;
@@ -223,10 +223,10 @@ namespace pasta
 
     // =====================================================================
     template<typename MT, enable_if_all_t
-             <is_eigen_v<MT>, eigen_rows_v<MT>()==2>*>
+             <is_eigen_v<MT>, eigen_rows_v<MT> == 2>*>
     inline auto comp_rot_angles(MT &&rot_mat) -> eigen_val_t<MT>
     {
-      static_assert(eigen_rows_v<MT>() == eigen_cols_v<MT>(),
+      static_assert(eigen_rows_v<MT> == eigen_cols_v<MT>,
                     "ERROR: INPUT MUST BE 2 x 2 SQUARE MATRIX.");
       return std::atan2(rot_mat(1,0),rot_mat(0,0));
     }
@@ -234,7 +234,7 @@ namespace pasta
     // =====================================================================
     template<typename MT, typename> inline void apply_rhr(MT &mat)
     {
-      static_assert(eigen_rows_v<MT>()==3 && eigen_cols_v<MT>()==3,
+      static_assert(eigen_rows_v<MT> ==3 && eigen_cols_v<MT> == 3,
                     "ERROR: CROSS PRODUCT ONLY FOR VEC OF SIZE 3.");
       if( mat.col(2).dot(mat.col(0).cross(mat.col(1))) < 0 )
         mat.col(2) *= (-1);
@@ -242,15 +242,15 @@ namespace pasta
 
     // =====================================================================
     template<typename Vec,
-             enable_if_any_t<is_eigen_dynamic_vec_v<Vec>(),
-                             is_eigen_fixed_row_vec_v<Vec>()>*>
+             enable_if_any_t<is_eigen_dynamic_vec_v<Vec>,
+                             is_eigen_fixed_row_vec_v<Vec> >*>
     auto comp_bound(Vec &&data) -> bound_dispatch_t<Vec>
     {
       return bound_dispatch_t<Vec>{data.minCoeff(), data.maxCoeff()};
     };
 
     // =====================================================================
-    template<typename MT, std::enable_if_t<is_eigen_dynamic_mat_v<MT>()>*>
+    template<typename MT, std::enable_if_t<is_eigen_dynamic_mat_v<MT> >*>
     auto comp_bound(MT &&data) -> bound_dispatch_t<MT>
     {
       bound_dispatch_t<MT> __result;
@@ -262,7 +262,7 @@ namespace pasta
     template<typename Bound, typename Steps,
              std::enable_if_t<is_eigen_v<Steps> >*>
     auto comp_bound_discrete_size(Bound &&bound, Steps &&steps)
-      -> Eigen::Matrix<int,dim_dispatch_v<Steps>(),1>
+      -> Eigen::Matrix<int,dim_dispatch_v<Steps>,1>
     {
       return ((bound.col(1)-bound.col(0)).array()/
               (steps.array())).template cast<int>() + 1;
@@ -295,7 +295,7 @@ namespace pasta
     template<typename BT, std::enable_if_t<is_eigen_v<BT> >*>
     inline bool bound_intersect(BT &&lhs, BT &&rhs)
     {
-      constexpr int __dim = eigen_rows_v<BT>();
+      constexpr int __dim = eigen_rows_v<BT>;
       for(auto __i = 0; __i < __dim; ++__i)
       {
         if( (lhs(__i,0) < rhs(__i,1)) && (lhs(__i,1) > rhs(__i,0)) )
@@ -310,19 +310,19 @@ namespace pasta
     template<typename PT, typename BT, typename>
     inline bool in_bound(PT &&pt, BT &&bound)
     {
-      static_assert(eigen_rows_v<PT>()== eigen_rows_v<BT>(),
+      static_assert(eigen_rows_v<PT> == eigen_rows_v<BT>,
                     "ERROR: PT AND BOUND DIMENSION MISMATCH.");
-      static_assert(eigen_cols_v<PT>()==1 && eigen_cols_v<BT>()==2,
+      static_assert(eigen_cols_v<PT> == 1 && eigen_cols_v<BT> == 2,
                     "ERROR: PT COLS != 1 OR BOUND COLS != 2.");
       using __scalr_t = eigen_val_t<PT>;
 
       return std::find_if
-        (pt.data(),pt.data()+eigen_rows_v<PT>(),
+        (pt.data(),pt.data()+eigen_rows_v<PT>,
          [&pt,&bound](const __scalr_t &__val)
          {
            return (pt(&__val-pt.data()) < bound(&__val-pt.data(),0)) ||
              (pt(&__val-pt.data()) > bound(&__val-pt.data(),1));
-         }) == pt.data()+eigen_rows_v<PT>();
+         }) == pt.data()+eigen_rows_v<PT>;
     };
 
     // // =====================================================================
@@ -348,7 +348,7 @@ namespace pasta
     template<typename VT> inline auto comp_pol_angles3(VT &&vec)
       -> Eigen::Matrix<eigen_val_t<VT>,2,1>
     {
-      static_assert(is_eigen_v<VT> && eigen_rows_v<VT>() == 3,
+      static_assert(is_eigen_v<VT> && eigen_rows_v<VT> == 3,
                     "ERROR: INPUT TYPE MUST BE AN EIGEN 3 X 1 VEC.");
       static_assert(!std::is_integral_v<eigen_val_t<VT> >,
                     "ERROR: INT TYPE FOR FLOAT DIVISION: USE EIGEN CAST.");

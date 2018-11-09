@@ -35,7 +35,7 @@
 // E-mail:   <jonathan.zj.lee@gmail.com>
 //
 // Started on  Thu Nov  1 23:54:07 2018 Zhijin Li
-// Last update Thu Nov  8 20:50:53 2018 Zhijin Li
+// Last update Fri Nov  9 23:17:38 2018 Zhijin Li
 // ---------------------------------------------------------------------------
 
 
@@ -51,11 +51,11 @@ namespace pasta
   namespace stats
   {
     template<typename T, int Dim, typename Kernel=kern::GaussKernel<T,Dim>,
-             bool cond=is_pst_kernel_v<Kernel>()> class InverseSampler;
+             bool cond=is_pst_kernel_v<Kernel> > class InverseSampler;
 
     template<typename T, int Dim, typename Proposal=rnd::RUniform<T>,
              typename Kernel=kern::GaussKernel<T,Dim>,
-             bool cond=is_pst_kernel_v<Kernel>()> class RejectSampler;
+             bool cond=is_pst_kernel_v<Kernel> > class RejectSampler;
 
     template<typename> class AdaptRejectSampler;
 
@@ -413,7 +413,7 @@ namespace pasta
       ///
       template<typename Data, typename Propo,
                enable_if_all_t<is_eigen_v<Data>,
-                               is_pst_distr_v<Propo>()>* = nullptr>
+                               is_pst_distr_v<Propo> >* = nullptr>
       RejectSampler(Data &&data, Propo &&proposal, value_t factor_m);
 
       /// @brief Ctor.
@@ -433,7 +433,7 @@ namespace pasta
       ///
       template<typename Data, typename Propo,
                enable_if_all_t<is_eigen_v<Data>,
-                               is_pst_distr_v<Propo>()>* = nullptr>
+                               is_pst_distr_v<Propo> >* = nullptr>
       RejectSampler(Data &&data, Propo &&proposal);
 
       /// @brief Ctor.
@@ -798,7 +798,7 @@ namespace pasta
                typename = enable_if_all_t
                <is_eigen_v<Struct>,
                 std::is_same_v<std::decay_t<Sample>,sampl_t>,
-                dim_dispatch_v<Struct>()==dim> >
+                dim_dispatch_v<Struct> == dim> >
       void draw(Struct &structure, Sample &&init_value,
                 int burnin_size=3000) const;
 

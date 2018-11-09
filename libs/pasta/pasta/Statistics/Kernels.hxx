@@ -35,7 +35,7 @@
 // E-mail:   <jonathan.zj.lee@gmail.com>
 //
 // Started on  Fri Nov  2 15:30:08 2018 Zhijin Li
-// Last update Sat Nov  3 22:32:53 2018 Zhijin Li
+// Last update Sat Nov 10 00:19:24 2018 Zhijin Li
 // ---------------------------------------------------------------------------
 
 
@@ -46,7 +46,7 @@ namespace pasta
 
     // =====================================================================
     template<typename Value, typename Data,
-             std::enable_if_t<is_eigen_vec_v<Data>()>*>
+             std::enable_if_t<is_eigen_vec_v<Data> >*>
     Value silverman_bw(Data &&data)
     {
       return 1.06 * std::sqrt(stats::var<Value>(data)) *
@@ -55,11 +55,12 @@ namespace pasta
 
     // =====================================================================
     template<typename Value, typename Data,
-             std::enable_if_t<is_eigen_mat_v<Data>()>*>
+             std::enable_if_t<is_eigen_mat_v<Data> >*>
     auto silverman_bw(Data &&data)
-      -> Eigen::Matrix<Value,dim_dispatch_v<Data>(),dim_dispatch_v<Data>()>
+      -> Eigen::Matrix<Value,
+                       dim_dispatch_v<Data>,dim_dispatch_v<Data> >
     {
-      constexpr int __dim = dim_dispatch_v<Data>();
+      constexpr int __dim = dim_dispatch_v<Data>;
       using __matrx_t = Eigen::Matrix<Value,__dim,__dim>;
       Value __coeff = std::pow(4.0/(__dim+2)/data.cols(),2.0/(__dim+4));
 
@@ -78,11 +79,11 @@ namespace pasta
     // =====================================================================
     template<typename Value, int Dim>
     template<typename Matrix, typename Point,
-             enable_if_all_t<is_eigen_mat_v<Matrix>(), is_eigen_v<Point> >*>
+             enable_if_all_t<is_eigen_mat_v<Matrix>, is_eigen_v<Point> >*>
     auto GaussKernel<Value,Dim>::operator()(Matrix &&data, Point &&pos) const
       -> value_t
     {
-      static_assert( dim_dispatch_v<Matrix>() == dim_dispatch_v<Point>(),
+      static_assert( dim_dispatch_v<Matrix> == dim_dispatch_v<Point>,
                      "POINT AND DATA VEC DIMENSION MISMATCH." );
 
       Value __result = 0.0;
@@ -99,14 +100,14 @@ namespace pasta
     // =====================================================================
     template<typename Value, int Dim>
     template<typename Matrix, typename Weights, typename Point,
-             enable_if_all_t<is_eigen_mat_v<Matrix>(),
-                             is_eigen_vec_v<Weights>(),
+             enable_if_all_t<is_eigen_mat_v<Matrix>,
+                             is_eigen_vec_v<Weights>,
                              is_eigen_v<Point> >*>
     auto GaussKernel<Value,Dim>::operator()(Matrix &&data,
                                             Weights &&weights,
                                             Point &&pos) const -> value_t
     {
-      static_assert( dim_dispatch_v<Matrix>() == dim_dispatch_v<Point>(),
+      static_assert( dim_dispatch_v<Matrix> == dim_dispatch_v<Point>,
                      "POINT AND DATA VEC DIMENSION MISMATCH." );
       // TODO: NEED TO PROPERLY IMPLEMENT WEIGHTING SCHEME.
       Value __result = 0.0;
@@ -151,7 +152,7 @@ namespace pasta
     auto GaussKernel<Value,1>::operator()(Vec &&data, value_t pos) const
       -> value_t
     {
-      static_assert( (dim_dispatch_v<Vec>()==1 ), "EXPECT A VECTOR." );
+      static_assert( (dim_dispatch_v<Vec> == 1 ), "EXPECT A VECTOR." );
 
       Value __result = 0.0;
 #pragma omp parallel for reduction (+:__result)
@@ -168,7 +169,7 @@ namespace pasta
                                           Weights &&weights,
                                           value_t pos) const -> value_t
     {
-      static_assert( (dim_dispatch_v<Vec>()==1 ), "EXPECT A VECTOR." );
+      static_assert( (dim_dispatch_v<Vec> == 1 ), "EXPECT A VECTOR." );
       // TODO: NEED TO PROPERLY IMPLEMENT WEIGHTING SCHEME.
       // TODO: CHECK OUT THE ELEMINATING BRANCH PREDICTION OPTMIZATION!!
       Value __result = 0.0;

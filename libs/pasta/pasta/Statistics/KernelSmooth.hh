@@ -35,7 +35,7 @@
 // E-mail:   <jonathan.zj.lee@gmail.com>
 //
 // Started on  Fri Nov  2 15:29:11 2018 Zhijin Li
-// Last update Sat Nov  3 22:33:27 2018 Zhijin Li
+// Last update Fri Nov  9 23:04:13 2018 Zhijin Li
 // ---------------------------------------------------------------------------
 
 
@@ -150,7 +150,7 @@ namespace pasta
       ///
       template<typename Tag, typename Data, typename Dom, typename Bandw,
                typename = enable_if_all_t<is_eigen_v<Data>,
-                                          is_pst_domain_v<Dom>()> >
+                                          is_pst_domain_v<Dom> > >
       estim_t<Data>
       estimate(Tag tag, Data &&data, Dom &&domain, Bandw &&band_width)
         const;
@@ -177,7 +177,7 @@ namespace pasta
       ///
       template<typename Tag, typename Data, typename Dom,
                enable_if_all_t<is_eigen_v<Data>,
-                               is_pst_domain_v<Dom>()>* = nullptr>
+                               is_pst_domain_v<Dom> >* = nullptr>
       estim_t<Data> estimate(Tag tag, Data &&data, Dom &&domain) const;
 
       /// @brief Run a kernel smooth estimation with given tag, data,
@@ -201,7 +201,7 @@ namespace pasta
       ///
       template<typename Tag, typename Data, typename Bandw,
                enable_if_all_t<is_eigen_v<Data>,
-                               !is_pst_domain_v<Bandw>()>* = nullptr>
+                               !is_pst_domain_v<Bandw> >* = nullptr>
       estim_t<Data> estimate(Tag tag, Data &&data, Bandw &&band_width) const;
 
       /// @brief Run a kernel smooth estimation with given tag, data,
@@ -243,7 +243,7 @@ namespace pasta
       /// locations.
       ///
       template<typename Data, typename Dom,
-               std::enable_if_t<is_pst_domain_v<Dom>()>* = nullptr>
+               std::enable_if_t<is_pst_domain_v<Dom> >* = nullptr>
       estim_t<Data>
       estimate_impl(Data &&data, Dom &&domain, cdf_tag_t tag) const;
 
@@ -259,7 +259,7 @@ namespace pasta
       /// locations.
       ///
       template<typename Data, typename Dom,
-               std::enable_if_t<is_pst_domain_v<Dom>()>* = nullptr>
+               std::enable_if_t<is_pst_domain_v<Dom> >* = nullptr>
       estim_t<Data>
       estimate_impl(Data &&data, Dom &&domain, icdf_tag_t tag) const;
 
@@ -278,7 +278,7 @@ namespace pasta
       /// locations.
       ///
       template<typename Data, typename Dom,
-               std::enable_if_t<is_pst_domain_v<Dom>()>* = nullptr>
+               std::enable_if_t<is_pst_domain_v<Dom> >* = nullptr>
       estim_t<Data>
       estimate_impl(Data &&data, Dom &&domain, pdf_tag_t tag) const;
 

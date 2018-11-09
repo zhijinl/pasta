@@ -35,7 +35,7 @@
 // E-mail:   <jonathan.zj.lee@gmail.com>
 //
 // Started on  Thu Nov  1 23:06:31 2018 Zhijin Li
-// Last update Thu Nov  8 21:48:17 2018 Zhijin Li
+// Last update Sat Nov 10 00:21:04 2018 Zhijin Li
 // ---------------------------------------------------------------------------
 
 
@@ -83,7 +83,7 @@ namespace pasta
   /// @return True if the pack contains at least one type.
   ///
   template<typename ...Types>
-  constexpr bool not_empty() { return sizeof...(Types) > 0; }
+  constexpr bool not_empty_v = (sizeof...(Types) > 0);
 
 
   ///@{
@@ -291,10 +291,9 @@ namespace pasta
   struct pst_dim_t<std::variant<T,Args...>,false>
   { static constexpr int value = pst_dim_t<T>::value; };
 
-  template<typename T> constexpr int pst_dim_v()
-  {
-    return pst_dim_t<std::decay_t<T> >::value;
-  }
+  template<typename T>
+  constexpr int pst_dim_v = pst_dim_t<std::decay_t<T> >::value;
+
   ///@}
 
 
@@ -316,19 +315,14 @@ namespace pasta
   /// - The `RowsAtCimpileTime` for `eigen_rows_v`.
   /// - The `ColsAtCimpileTime` for `eigen_cols_v`.
   ///
-  template<typename ET> using eigen_val_t = typename std::decay_t<ET>::RealScalar;
+  template<typename ET> using eigen_val_t =
+    typename std::decay_t<ET>::RealScalar;
 
   template<typename ET, typename = std::enable_if_t<is_eigen_v<ET> > >
-  constexpr int eigen_rows_v()
-  {
-    return std::decay_t<ET>::RowsAtCompileTime;
-  }
+  constexpr int eigen_rows_v = std::decay_t<ET>::RowsAtCompileTime;
 
   template<typename ET, typename = std::enable_if_t<is_eigen_v<ET> > >
-  constexpr int eigen_cols_v()
-  {
-    return std::decay_t<ET>::ColsAtCompileTime;
-  }
+  constexpr int eigen_cols_v = std::decay_t<ET>::ColsAtCompileTime;
   ///@}
 
 
@@ -343,16 +337,19 @@ namespace pasta
   /// false otherwise. Returns false if the structure is not an Eigen type.
   ///
   template<typename ET, std::enable_if_t<is_eigen_v<ET> >* = nullptr>
-  constexpr bool eigen_colmajor_v()
+  constexpr bool eigen_colmajor()
   {
     return  !std::decay_t<ET>::IsRowMajor;
   }
 
   template<typename ET, std::enable_if_t<!is_eigen_v<ET> >* = nullptr>
-  constexpr bool eigen_colmajor_v()
+  constexpr bool eigen_colmajor()
   {
     return  false;
   }
+
+  template<typename ET>
+  constexpr bool eigen_colmajor_v = eigen_colmajor<std::decay_t<ET> >();
   ///@}
 
 
@@ -371,17 +368,21 @@ namespace pasta
   ///
   template<typename ET, int Rows, int Cols,
            std::enable_if_t<is_eigen_v<ET> >* = nullptr>
-  constexpr bool eigen_size_is_v()
+  constexpr bool eigen_size_is()
   {
-    return (eigen_rows_v<ET>()==Rows) && (eigen_cols_v<ET>()==Cols);
+    return (eigen_rows_v<ET> == Rows) && (eigen_cols_v<ET> == Cols);
   }
 
   template<typename ET, int Rows, int Cols,
            std::enable_if_t<!is_eigen_v<ET> >* = nullptr>
-  constexpr bool eigen_size_is_v()
+  constexpr bool eigen_size_is()
   {
     return false;
   }
+
+  template<typename ET, int Rows, int Cols>
+  constexpr bool eigen_size_is_v =
+    eigen_size_is<std::decay_t<ET>,Rows,Cols>();
   ///@}
 
 
@@ -397,16 +398,20 @@ namespace pasta
   /// the structure is not an Eigen type.
   ///
   template<typename ET, std::enable_if_t<is_eigen_v<ET> >* = nullptr>
-  constexpr bool is_eigen_dynamic_row_vec_v()
+  constexpr bool is_eigen_dynamic_row_vec()
   {
-    return (eigen_rows_v<ET>()==1) && (eigen_cols_v<ET>()==-1);
+    return (eigen_rows_v<ET> == 1) && (eigen_cols_v<ET> == -1);
   }
 
   template<typename ET, std::enable_if_t<!is_eigen_v<ET> >* = nullptr>
-  constexpr bool is_eigen_dynamic_row_vec_v()
+  constexpr bool is_eigen_dynamic_row_vec()
   {
     return false;
   }
+
+  template<typename ET>
+  constexpr bool is_eigen_dynamic_row_vec_v =
+    is_eigen_dynamic_row_vec<std::decay_t<ET> >();
   ///@}
 
 
@@ -422,16 +427,20 @@ namespace pasta
   /// the structure is not an Eigen type.
   ///
   template<typename ET, std::enable_if_t<is_eigen_v<ET> >* = nullptr>
-  constexpr bool is_eigen_dynamic_col_vec_v()
+  constexpr bool is_eigen_dynamic_col_vec()
   {
-    return (eigen_rows_v<ET>()==-1) && (eigen_cols_v<ET>()==1);
+    return (eigen_rows_v<ET> == -1) && (eigen_cols_v<ET> == 1);
   }
 
   template<typename ET, std::enable_if_t<!is_eigen_v<ET> >* = nullptr>
-  constexpr bool is_eigen_dynamic_col_vec_v()
+  constexpr bool is_eigen_dynamic_col_vec()
   {
     return false;
   }
+
+  template<typename ET>
+  constexpr bool is_eigen_dynamic_col_vec_v =
+    is_eigen_dynamic_col_vec<std::decay_t<ET> >();
   ///@}
 
 
@@ -448,17 +457,21 @@ namespace pasta
   /// if the structure is not an Eigen type.
   ///
   template<typename ET, std::enable_if_t<is_eigen_v<ET> >* = nullptr>
-  constexpr bool is_eigen_dynamic_vec_v()
+  constexpr bool is_eigen_dynamic_vec()
   {
-    return is_eigen_dynamic_row_vec_v<ET>() ||
-      is_eigen_dynamic_col_vec_v<ET>();
+    return is_eigen_dynamic_row_vec_v<ET> ||
+      is_eigen_dynamic_col_vec_v<ET>;
   }
 
   template<typename ET, std::enable_if_t<!is_eigen_v<ET> >* = nullptr>
-  constexpr bool is_eigen_dynamic_vec_v()
+  constexpr bool is_eigen_dynamic_vec()
   {
     return false;
   }
+
+  template<typename ET>
+  constexpr bool is_eigen_dynamic_vec_v =
+    is_eigen_dynamic_vec<std::decay_t<ET> >();
   ///@}
 
 
@@ -476,18 +489,22 @@ namespace pasta
   /// if the structure is not an Eigen type.
   ///
   template<typename ET, std::enable_if_t<is_eigen_v<ET> >* = nullptr>
-  constexpr bool is_eigen_dynamic_mat_v()
+  constexpr bool is_eigen_dynamic_mat()
   {
-    return ( (eigen_rows_v<ET>()>1) && (eigen_cols_v<ET>()==-1) ) ||
-      ( (eigen_rows_v<ET>()==-1) && (eigen_cols_v<ET>()>1) ) ||
-      ( (eigen_rows_v<ET>()==-1) && (eigen_cols_v<ET>()==-1) );
+    return ( (eigen_rows_v<ET> > 1) && (eigen_cols_v<ET> == -1) ) ||
+      ( (eigen_rows_v<ET> == -1) && (eigen_cols_v<ET> > 1) ) ||
+      ( (eigen_rows_v<ET> == -1) && (eigen_cols_v<ET> == -1) );
   }
 
   template<typename ET, std::enable_if_t<!is_eigen_v<ET> >* = nullptr>
-  constexpr bool is_eigen_dynamic_mat_v()
+  constexpr bool is_eigen_dynamic_mat()
   {
     return false;
   }
+
+  template<typename ET>
+  constexpr bool is_eigen_dynamic_mat_v =
+    is_eigen_dynamic_mat<std::decay_t<ET> >();
   ///@}
 
 
@@ -503,17 +520,21 @@ namespace pasta
   /// false if the structure is not an Eigen type.
   ///
   template<typename ET, std::enable_if_t<is_eigen_v<ET> >* = nullptr>
-  constexpr bool is_eigen_fixed_size_v()
+  constexpr bool is_eigen_fixed_size()
   {
-    return (eigen_rows_v<ET>() != Eigen::Dynamic) &&
-      (eigen_cols_v<ET>() != Eigen::Dynamic);
+    return (eigen_rows_v<ET> != Eigen::Dynamic) &&
+      (eigen_cols_v<ET> != Eigen::Dynamic);
   }
 
   template<typename ET, std::enable_if_t<!is_eigen_v<ET> >* = nullptr>
-  constexpr bool is_eigen_fixed_size_v()
+  constexpr bool is_eigen_fixed_size()
   {
     return false;
   }
+
+  template<typename ET>
+  constexpr bool is_eigen_fixed_size_v =
+    is_eigen_fixed_size<std::decay_t<ET> >();
   ///@}
 
 
@@ -529,16 +550,20 @@ namespace pasta
   /// if the structure is not an Eigen type.
   ///
   template<typename ET, std::enable_if_t<is_eigen_v<ET> >* = nullptr>
-  constexpr bool is_eigen_fixed_mat_v()
+  constexpr bool is_eigen_fixed_mat()
   {
-    return (eigen_rows_v<ET>() > 1) && (eigen_cols_v<ET>() > 1);
+    return (eigen_rows_v<ET> > 1) && (eigen_cols_v<ET> > 1);
   }
 
   template<typename ET, std::enable_if_t<!is_eigen_v<ET> >* = nullptr>
-  constexpr bool is_eigen_fixed_mat_v()
+  constexpr bool is_eigen_fixed_mat()
   {
     return false;
   }
+
+  template<typename ET>
+  constexpr bool is_eigen_fixed_mat_v =
+    is_eigen_fixed_mat<std::decay_t<ET> >();
   ///@}
 
 
@@ -554,16 +579,20 @@ namespace pasta
   /// Returns false if the structure is not an Eigen type.
   ///
   template<typename ET, std::enable_if_t<is_eigen_v<ET> >* = nullptr>
-  constexpr bool is_eigen_fixed_col_vec_v()
+  constexpr bool is_eigen_fixed_col_vec()
   {
-    return is_eigen_fixed_size_v<ET>() && (eigen_cols_v<ET>() == 1);
+    return is_eigen_fixed_size_v<ET> && (eigen_cols_v<ET> == 1);
   }
 
   template<typename ET, std::enable_if_t<!is_eigen_v<ET> >* = nullptr>
-  constexpr bool is_eigen_fixed_col_vec_v()
+  constexpr bool is_eigen_fixed_col_vec()
   {
     return false;
   }
+
+  template<typename ET>
+  constexpr bool is_eigen_fixed_col_vec_v =
+    is_eigen_fixed_col_vec<std::decay_t<ET> >();
   ///@}
 
 
@@ -579,16 +608,20 @@ namespace pasta
   /// Returns false if the structure is not an Eigen type.
   ///
   template<typename ET, std::enable_if_t<is_eigen_v<ET> >* = nullptr>
-  constexpr bool is_eigen_fixed_row_vec_v()
+  constexpr bool is_eigen_fixed_row_vec()
   {
-    return is_eigen_fixed_size_v<ET>() && (eigen_rows_v<ET>() == 1);
+    return is_eigen_fixed_size_v<ET> && (eigen_rows_v<ET> == 1);
   }
 
   template<typename ET, std::enable_if_t<!is_eigen_v<ET> >* = nullptr>
-  constexpr bool is_eigen_fixed_row_vec_v()
+  constexpr bool is_eigen_fixed_row_vec()
   {
     return false;
   }
+
+  template<typename ET>
+  constexpr bool is_eigen_fixed_row_vec_v =
+    is_eigen_fixed_row_vec<std::decay_t<ET> >();
   ///@}
 
 
@@ -604,15 +637,19 @@ namespace pasta
   /// is 1. Returns false if the structure is not an Eigen type.
   ///
   template<typename ET, std::enable_if_t<is_eigen_v<ET> >* = nullptr>
-  constexpr bool is_eigen_fixed_vec_v()
+  constexpr bool is_eigen_fixed_vec()
   {
-    return is_eigen_fixed_row_vec_v<ET>() || is_eigen_fixed_col_vec_v<ET>();
+    return is_eigen_fixed_row_vec_v<ET> || is_eigen_fixed_col_vec_v<ET>;
   }
 
   template<typename ET, std::enable_if_t<!is_eigen_v<ET> >* = nullptr>
-  constexpr bool is_eigen_fixed_vec_v() {
+  constexpr bool is_eigen_fixed_vec() {
     return false;
   }
+
+  template<typename ET>
+  constexpr bool is_eigen_fixed_vec_v =
+    is_eigen_fixed_vec<std::decay_t<ET> >();
   ///@}
 
 
@@ -627,16 +664,19 @@ namespace pasta
   /// Returns false if the structure is not an Eigen type.
   ///
   template<typename ET, std::enable_if_t<is_eigen_v<ET> >* = nullptr>
-  constexpr bool is_eigen_mat_v()
+  constexpr bool is_eigen_mat()
   {
-    return is_eigen_fixed_mat_v<ET>() || is_eigen_dynamic_mat_v<ET>();
+    return is_eigen_fixed_mat_v<ET> || is_eigen_dynamic_mat_v<ET>;
   }
 
   template<typename ET, std::enable_if_t<!is_eigen_v<ET> >* = nullptr>
-  constexpr bool is_eigen_mat_v()
+  constexpr bool is_eigen_mat()
   {
     return false;
   }
+
+  template<typename ET>
+  constexpr bool is_eigen_mat_v = is_eigen_mat<std::decay_t<ET> >();
   ///@}
 
 
@@ -651,17 +691,20 @@ namespace pasta
   /// Returns false if the structure is not an Eigen type.
   ///
   template<typename ET, std::enable_if_t<is_eigen_v<ET> >* = nullptr>
-  constexpr bool is_eigen_row_vec_v()
+  constexpr bool is_eigen_row_vec()
   {
-    return is_eigen_dynamic_row_vec_v<ET>() ||
-      is_eigen_fixed_row_vec_v<ET>();
+    return is_eigen_dynamic_row_vec_v<ET> ||
+      is_eigen_fixed_row_vec_v<ET>;
   }
 
   template<typename ET, std::enable_if_t<!is_eigen_v<ET> >* = nullptr>
-  constexpr bool is_eigen_row_vec_v()
+  constexpr bool is_eigen_row_vec()
   {
     return false;
   }
+
+  template<typename ET>
+  constexpr bool is_eigen_row_vec_v = is_eigen_row_vec<std::decay_t<ET> >();
   ///@}
 
 
@@ -676,17 +719,20 @@ namespace pasta
   /// Returns false if the structure is not an Eigen type.
   ///
   template<typename ET, std::enable_if_t<is_eigen_v<ET> >* = nullptr>
-  constexpr bool is_eigen_col_vec_v()
+  constexpr bool is_eigen_col_vec()
   {
     return is_eigen_dynamic_col_vec_v<ET>() ||
       is_eigen_fixed_col_vec_v<ET>();
   }
 
   template<typename ET, std::enable_if_t<!is_eigen_v<ET> >* = nullptr>
-  constexpr bool is_eigen_col_vec_v()
+  constexpr bool is_eigen_col_vec()
   {
     return false;
   }
+
+  template<typename ET>
+  constexpr bool is_eigen_col_vec_v = is_eigen_col_vec<std::decay_t<ET> >();
   ///@}
 
 
@@ -701,16 +747,19 @@ namespace pasta
   /// Returns false if the structure is not an Eigen type.
   ///
   template<typename ET, std::enable_if_t<is_eigen_v<ET> >* = nullptr>
-  constexpr bool is_eigen_vec_v()
+  constexpr bool is_eigen_vec()
   {
-    return is_eigen_fixed_vec_v<ET>() || is_eigen_dynamic_vec_v<ET>();
+    return is_eigen_fixed_vec_v<ET> || is_eigen_dynamic_vec_v<ET>;
   }
 
   template<typename ET, std::enable_if_t<!is_eigen_v<ET> >* = nullptr>
-  constexpr bool is_eigen_vec_v()
+  constexpr bool is_eigen_vec()
   {
     return false;
   }
+
+  template<typename ET>
+  constexpr bool is_eigen_vec_v = is_eigen_vec<std::decay_t<ET> >();
   ///@}
 
 
@@ -737,8 +786,8 @@ namespace pasta
   ///
   template<typename M, bool cond=is_eigen_v<M> > struct __to_mat {};
   template<typename M> struct __to_mat<M,true>
-  { using type = Eigen::Matrix<eigen_val_t<M>,eigen_rows_v<M>(),
-                               eigen_cols_v<M>()>; };
+  { using type = Eigen::Matrix<eigen_val_t<M>,eigen_rows_v<M>,
+                               eigen_cols_v<M> >; };
   template<typename M> struct __to_mat<M,false> { using type = void; };
   template<typename M> using eigen_mat_t =
     typename __to_mat<std::decay_t<M> >::type;
@@ -804,7 +853,7 @@ namespace pasta
   template<typename Val> struct rotmat_dispatch<Val,true>
   {
     using type = typename __rot_dispatcher
-      <eigen_val_t<Val>,eigen_rows_v<Val>()>::type;
+      <eigen_val_t<Val>,eigen_rows_v<Val> >::type;
   };
 
   template<typename Val>
@@ -908,10 +957,7 @@ namespace pasta
   /// @sa `pasta::pst_id_list`
   ///
   template<typename T, pst_id_list id>
-  constexpr bool pst_id_is_v()
-  {
-    return traits::specs<std::decay_t<T> >::pst_id == id;
-  }
+  constexpr bool pst_id_is_v = (traits::specs<std::decay_t<T> >::pst_id == id);
   ///@}
 
 
@@ -923,10 +969,8 @@ namespace pasta
   /// @param T: the input type.
   /// @return True when the input type is a pasta distribution.
   ///
-  template<typename T> constexpr bool is_pst_distr_v()
-  {
-    return pst_id_is_v<T,pst_id_list::PASTA_RANDOM_VAR>();
-  }
+  template<typename T>
+  constexpr bool is_pst_distr_v =  pst_id_is_v<T,pst_id_list::PASTA_RANDOM_VAR>;
 
 
   ///@{
@@ -937,11 +981,9 @@ namespace pasta
   /// @param T: the input type.
   /// @return True is the input type is a pasta symmetric distribution.
   ///
-  template<typename T> constexpr bool is_symmetric_distr_v()
-  {
-    return is_pst_distr_v<T>() &&
-      traits::specs<std::decay_t<T> >::is_symmetric;
-  }
+  template<typename T>
+  constexpr bool is_symmetric_distr_v =
+    (is_pst_distr_v<T> && traits::specs<std::decay_t<T> >::is_symmetric);
 
 
   ///@{
@@ -970,14 +1012,11 @@ namespace pasta
     // A std::variant containing at least one matched ID is
     // considered true.
     static const bool value =
-      std::disjunction_v<(pst_id_is_v<Args,id>())...>();
+      std::disjunction_v<(pst_id_is_v<Args,id>)...>();
   };
 
   template<typename T, pst_id_list id>
-  constexpr bool is_variant_of_v()
-  {
-    return is_variant_of<std::decay_t<T>, id>::value;
-  }
+  constexpr bool is_variant_of_v = is_variant_of<std::decay_t<T>,id>::value;
   ///@}
 
 
@@ -988,10 +1027,8 @@ namespace pasta
   /// @param T: the input type.
   /// @return True is the input type is a pasta kernel.
   ///
-  template<typename T> constexpr bool is_pst_kernel_v()
-  {
-    return pst_id_is_v<T,pst_id_list::PASTA_KERNEL>();
-  }
+  template<typename T>
+  constexpr bool is_pst_kernel_v = pst_id_is_v<T,pst_id_list::PASTA_KERNEL>;
 
 
   /// @ingroup group_meta
@@ -1001,16 +1038,35 @@ namespace pasta
   /// @param T: the input type.
   /// @return True is the input type is a pasta domain.
   ///
-  template<typename T> constexpr bool is_pst_domain_v()
-  {
-    return pst_id_is_v<T,pst_id_list::PASTA_DOMAIN>();
-  }
+  template<typename T>
+  constexpr bool is_pst_domain_v = pst_id_is_v<T,pst_id_list::PASTA_DOMAIN>;
+
+
+  ///@{
+  /// @ingroup group_meta
+  ///
+  /// @brief Detect if an input type is an STL vector.
+  ///
+  /// @param T: the input type.
+  /// @return True is the input type is an STL vector.
+  ///
+  template<typename T>
+  struct is_stl_vector_t: std::false_type {};
+
+  template<typename ...Args>
+  struct is_stl_vector_t<std::vector<Args...> >: std::true_type {};
+
+  template<typename T>
+  constexpr bool is_stl_vector_v = is_stl_vector_t<std::decay_t<T> >::value;
+  ///@}
+
 
   /// @ingroup group_meta
   ///
   /// @brief Detect if an input type is an STL vector with specific element
   /// type and allocator type.
   ///
+  /// @param Struct: type of the input structure.
   /// @param Element: the element's type, i.e. `value_type` of the vector.
   /// @param Allocator: the allocator's type. Defaults to the standard
   /// `allocator_type` of `std::vector`.
@@ -1019,11 +1075,8 @@ namespace pasta
   ///
   template<typename Struct, typename Element,
            typename Allocator = typename std::vector<Element>::allocator_type>
-  constexpr bool is_stl_vector_of_v()
-  {
-    return std::is_same_v
-      <std::decay_t<Struct>, std::vector<Element,Allocator> >;
-  }
+  constexpr bool is_stl_vector_of_v =
+    std::is_same_v<std::decay_t<Struct>, std::vector<Element,Allocator> >;
 
 
   ///@{
@@ -1093,7 +1146,7 @@ namespace pasta
   /// 1. T has the traits `need_align` set to `true`.
   /// 2. Or T is an Eigen fix sized structure itself.
   ///
-  template<typename T, bool cond = is_eigen_fixed_size_v<T>()>
+  template<typename T, bool cond = is_eigen_fixed_size_v<T> >
   struct alloc_dispatch
     : public std::conditional<cond, Eigen::aligned_allocator<std::decay_t<T> >,
                               std::allocator<std::decay_t<T> > > {};
@@ -1121,21 +1174,29 @@ namespace pasta
   /// 4. If an Eigen Matrix, whether fixed or dynamic is given, it leads to
   /// `RowsAtCompileTime`. This means that the matrix **show be column ordered**,
   /// each column represnts a Dim-dimensional element.
+  /// 5. If an `std::vector` is given, returns 1. `std::vector` has the same
+  /// structural dimensional as a dynamic Eigen vector.
   ///
   /// @param T: the input structure type.
   /// @return The structure dimension.
   ///
+  template<typename T, std::enable_if_t<is_stl_vector_v<T> >* = nullptr>
+  constexpr int dim_dispatch() { return 1; }
+
   template<typename T, std::enable_if_t<std::is_arithmetic_v<T> >* = nullptr>
-  constexpr int dim_dispatch_v() { return 1; }
+  constexpr int dim_dispatch() { return 1; }
 
-  template<typename T, std::enable_if_t<is_eigen_dynamic_vec_v<T>()>* = nullptr>
-  constexpr int dim_dispatch_v() { return 1; }
+  template<typename T, std::enable_if_t<is_eigen_dynamic_vec_v<T> >* = nullptr>
+  constexpr int dim_dispatch() { return 1; }
 
-  template<typename T, std::enable_if_t<is_eigen_fixed_vec_v<T>()>* = nullptr>
-  constexpr int dim_dispatch_v() { return eigen_rows_v<T>(); }
+  template<typename T, std::enable_if_t<is_eigen_fixed_vec_v<T> >* = nullptr>
+  constexpr int dim_dispatch() { return eigen_rows_v<T>; }
 
-  template<typename T, std::enable_if_t<is_eigen_mat_v<T>()>* = nullptr>
-  constexpr int dim_dispatch_v() { return eigen_rows_v<T>(); }
+  template<typename T, std::enable_if_t<is_eigen_mat_v<T> >* = nullptr>
+  constexpr int dim_dispatch() { return eigen_rows_v<T>; }
+
+  template<typename T>
+  constexpr int dim_dispatch_v = dim_dispatch<std::decay_t<T> >();
   ///@}
 
 
@@ -1194,8 +1255,8 @@ namespace pasta
   ///
   template<typename MT,
            bool cond0=is_eigen_v<MT>,
-           bool cond1=is_eigen_fixed_col_vec_v<MT>(),
-           bool cond2=is_eigen_dynamic_vec_v<MT>()>
+           bool cond1=is_eigen_fixed_col_vec_v<MT>,
+           bool cond2=is_eigen_dynamic_vec_v<MT> >
   struct bound_dispatch {};
 
   // For non-Eigen structures
@@ -1212,7 +1273,7 @@ namespace pasta
 
   // This case is for Matrices or fix sized row vectors.
   template<typename MT> struct bound_dispatch<MT,true,false,false>
-  { using type = Eigen::Matrix<eigen_val_t<MT>,eigen_rows_v<MT>(),2>; };
+  { using type = Eigen::Matrix<eigen_val_t<MT>,eigen_rows_v<MT>,2>; };
 
   template<typename MT>
   using bound_dispatch_t = typename bound_dispatch<std::decay_t<MT> >::type;

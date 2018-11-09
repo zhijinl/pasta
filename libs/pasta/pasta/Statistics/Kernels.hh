@@ -35,7 +35,7 @@
 // E-mail:   <jonathan.zj.lee@gmail.com>
 //
 // Started on  Fri Nov  2 15:29:55 2018 Zhijin Li
-// Last update Sat Nov  3 22:29:45 2018 Zhijin Li
+// Last update Sat Nov 10 00:19:16 2018 Zhijin Li
 // ---------------------------------------------------------------------------
 
 
@@ -74,13 +74,13 @@ namespace pasta
     /// (http://www.stat.ufl.edu/~rrandles/sta6934/smhandout.pdf)
     ///
     template<typename Value, typename Data,
-             std::enable_if_t<is_eigen_vec_v<Data>()>* = nullptr>
+             std::enable_if_t<is_eigen_vec_v<Data> >* = nullptr>
     Value silverman_bw(Data &&data);
 
     template<typename Value, typename Data,
-             std::enable_if_t<is_eigen_mat_v<Data>()>* = nullptr>
+             std::enable_if_t<is_eigen_mat_v<Data> >* = nullptr>
     auto silverman_bw(Data &&data)
-      -> Eigen::Matrix<Value,dim_dispatch_v<Data>(),dim_dispatch_v<Data>()>;
+      -> Eigen::Matrix<Value,dim_dispatch_v<Data>,dim_dispatch_v<Data> >;
     ///@}
 
   }
@@ -203,7 +203,7 @@ namespace pasta
       /// @return The computed smoothed value at position pos.
       ///
       template<typename Matrix, typename Point,
-               enable_if_all_t<is_eigen_mat_v<Matrix>(),
+               enable_if_all_t<is_eigen_mat_v<Matrix>,
                                is_eigen_v<Point> >* = nullptr>
       value_t operator()(Matrix &&data, Point &&pos) const;
 
@@ -230,8 +230,8 @@ namespace pasta
       /// @return The computed smoothed value at position pos.
       ///
       template<typename Matrix, typename Weights, typename Point,
-               enable_if_all_t<is_eigen_mat_v<Matrix>(),
-                               is_eigen_vec_v<Weights>(),
+               enable_if_all_t<is_eigen_mat_v<Matrix>,
+                               is_eigen_vec_v<Weights>,
                                is_eigen_v<Point> >* = nullptr>
       value_t operator()(Matrix &&data, Weights &&weights, Point &&pos) const;
 
@@ -355,7 +355,7 @@ namespace pasta
       /// @return The computed smoothed sum at position pos.
       ///
       template<typename Matrix, typename Point,
-               enable_if_all_t<is_eigen_mat_v<Matrix>(),
+               enable_if_all_t<is_eigen_mat_v<Matrix>,
                                is_eigen_v<Point> >* = nullptr>
       value_t operator()(Matrix &&data, Point &&pos) const;
 
@@ -382,8 +382,8 @@ namespace pasta
       /// @return The computed smoothed value at position pos.
       ///
       template<typename Matrix, typename Weights, typename Point,
-               enable_if_all_t<is_eigen_mat_v<Matrix>(),
-                               is_eigen_vec_v<Weights>(),
+               enable_if_all_t<is_eigen_mat_v<Matrix>,
+                               is_eigen_vec_v<Weights>,
                                is_eigen_v<Point> >* = nullptr>
       value_t operator()(Matrix &&data, Weights &&weights,
                          Point &&pos) const;

@@ -35,7 +35,7 @@
 // E-mail:   <jonathan.zj.lee@gmail.com>
 //
 // Started on  Fri Nov  2 17:38:33 2018 Zhijin Li
-// Last update Wed Nov  7 19:16:26 2018 Zhijin Li
+// Last update Fri Nov  9 23:16:07 2018 Zhijin Li
 // ---------------------------------------------------------------------------
 
 
@@ -45,10 +45,6 @@
 
 int main()
 {
-  /// Defs.
-  using dtype = float;
-  constexpr int dim = 3;
-
 
   /// Create vectors for slicing:
   /// note -> in-place slicing works only for

@@ -35,7 +35,7 @@
 // E-mail:   <jonathan.zj.lee@gmail.com>
 //
 // Started on  Thu Nov  1 23:54:25 2018 Zhijin Li
-// Last update Sat Nov  3 22:31:17 2018 Zhijin Li
+// Last update Fri Nov  9 23:10:51 2018 Zhijin Li
 // ---------------------------------------------------------------------------
 
 
@@ -100,7 +100,7 @@ namespace pasta
     // =====================================================================
     template<typename T, int Dim, typename Proposal, typename Kernel>
     template<typename Data, typename Propo,
-             enable_if_all_t<is_eigen_v<Data>,is_pst_distr_v<Propo>()>*>
+             enable_if_all_t<is_eigen_v<Data>,is_pst_distr_v<Propo> >*>
     RejectSampler<T,Dim,Proposal,Kernel,true>::
     RejectSampler(Data &&data, Propo &&proposal, value_t factor_m):
       _data_pts( std::forward<Data>(data) ),
@@ -114,7 +114,7 @@ namespace pasta
     // =====================================================================
     template<typename T, int Dim, typename Proposal, typename Kernel>
     template<typename Data, typename Propo,
-             enable_if_all_t<is_eigen_v<Data>,is_pst_distr_v<Propo>()>*>
+             enable_if_all_t<is_eigen_v<Data>,is_pst_distr_v<Propo> >*>
     RejectSampler<T,Dim,Proposal,Kernel,true>::
     RejectSampler(Data &&data, Propo &&proposal):
       _data_pts( std::forward<Data>(data) ),
@@ -270,7 +270,7 @@ namespace pasta
       make_proposal(mcmc_dispatch_t<Type>{});
       while( _unif_sampler.draw() >
              mh_ratio(mcmc_dispatch_t<Type>{},
-                      symm_dispatch_t<is_symmetric_distr_v<Proposal>()>{}))
+                      symm_dispatch_t<is_symmetric_distr_v<Proposal> >{}))
       {
         make_proposal(mcmc_dispatch_t<Type>{});
       }
@@ -291,7 +291,7 @@ namespace pasta
         make_proposal(mcmc_dispatch_t<Type>{});
         if( _unif_sampler.draw() <= mh_ratio
             (mcmc_dispatch_t<Type>{},
-             symm_dispatch_t<is_symmetric_distr_v<Proposal>()>{}) )
+             symm_dispatch_t<is_symmetric_distr_v<Proposal> >{}) )
           _currnt_state = _currnt_propo;
       }
       _conv_reached = true;

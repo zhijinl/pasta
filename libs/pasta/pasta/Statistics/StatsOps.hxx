@@ -35,7 +35,7 @@
 // E-mail:   <jonathan.zj.lee@gmail.com>
 //
 // Started on  Fri Nov  2 15:30:36 2018 Zhijin Li
-// Last update Sat Nov  3 22:34:40 2018 Zhijin Li
+// Last update Fri Nov  9 23:20:49 2018 Zhijin Li
 // ---------------------------------------------------------------------------
 
 
@@ -54,7 +54,7 @@ namespace pasta
 
     // =====================================================================
     template<typename Scalar, typename VT,
-             enable_if_all_t<is_eigen_v<VT>, dim_dispatch_v<VT>()==1>*>
+             enable_if_all_t<is_eigen_v<VT>, dim_dispatch_v<VT> == 1>*>
     inline Scalar mean(VT &&vec)
     {
       return vec.mean();
@@ -62,9 +62,9 @@ namespace pasta
 
     // =====================================================================
     template<typename Scalar, typename MT,
-             enable_if_all_t<is_eigen_v<MT>, dim_dispatch_v<MT>()!=1>*>
+             enable_if_all_t<is_eigen_v<MT>, dim_dispatch_v<MT> != 1>*>
     inline auto mean(MT &&mat)
-      -> Eigen::Matrix<Scalar,dim_dispatch_v<MT>(),1>
+      -> Eigen::Matrix<Scalar,dim_dispatch_v<MT>,1>
     {
       return mat.rowwise().mean().template cast<Scalar>();
     }
@@ -109,7 +109,7 @@ namespace pasta
 
     // =====================================================================
     template<typename Scalar, typename VT,
-             enable_if_all_t<is_eigen_v<VT>, dim_dispatch_v<VT>()==1>*>
+             enable_if_all_t<is_eigen_v<VT>, dim_dispatch_v<VT> == 1>*>
     inline Scalar var(VT &&vec)
     {
       auto __factor = 1.0/static_cast<Scalar>(vec.size()-1);
@@ -119,7 +119,7 @@ namespace pasta
 
     // =====================================================================
     template<typename Scalar, typename VT,
-             enable_if_all_t<is_eigen_v<VT>, dim_dispatch_v<VT>()==1>*>
+             enable_if_all_t<is_eigen_v<VT>, dim_dispatch_v<VT> == 1>*>
     inline Scalar var(VT &&vec, uncorrected_t)
     {
       return (vec.array()*vec.array()).sum()/static_cast<Scalar>(vec.size())
@@ -128,7 +128,7 @@ namespace pasta
 
     // =====================================================================
     template<typename Scalar, typename VT,
-             enable_if_all_t<is_eigen_v<VT>, dim_dispatch_v<VT>()==1>*>
+             enable_if_all_t<is_eigen_v<VT>, dim_dispatch_v<VT> == 1>*>
     inline Scalar var(VT &&vec, Scalar true_mean)
     {
       return (vec.array()*vec.array()).sum()/static_cast<Scalar>(vec.size())
@@ -137,9 +137,9 @@ namespace pasta
 
     // =====================================================================
     template<typename Scalar, typename MT,
-             enable_if_all_t<is_eigen_v<MT>, dim_dispatch_v<MT>()!=1>*>
+             enable_if_all_t<is_eigen_v<MT>, dim_dispatch_v<MT> != 1>*>
     inline auto var(MT &&data)
-      -> Eigen::Matrix<Scalar,dim_dispatch_v<MT>(),dim_dispatch_v<MT>()>
+      -> Eigen::Matrix<Scalar,dim_dispatch_v<MT>,dim_dispatch_v<MT> >
     {
       auto __mean = mean<Scalar>(data);
       auto __factor = 1.0/static_cast<Scalar>(data.cols()-1);
@@ -149,9 +149,9 @@ namespace pasta
 
     // =====================================================================
     template<typename Scalar, typename MT,
-             enable_if_all_t<is_eigen_v<MT>, dim_dispatch_v<MT>()!=1>*>
+             enable_if_all_t<is_eigen_v<MT>, dim_dispatch_v<MT> != 1>*>
     inline auto var(MT &&data, uncorrected_t)
-      -> Eigen::Matrix<Scalar,dim_dispatch_v<MT>(),dim_dispatch_v<MT>()>
+      -> Eigen::Matrix<Scalar,dim_dispatch_v<MT>,dim_dispatch_v<MT> >
     {
       auto __mean = mean<Scalar>(data);
       return (data*data.transpose()).template cast<Scalar>()/(data.cols())
@@ -162,10 +162,10 @@ namespace pasta
     template<typename Scalar, typename MT, typename VT,
              enable_if_all_t<is_eigen_v<MT>,
                              is_eigen_v<VT>,
-                             dim_dispatch_v<VT>()==1,
-                             dim_dispatch_v<MT>()!=1>*>
+                             dim_dispatch_v<VT> == 1,
+                             dim_dispatch_v<MT> != 1>*>
     inline auto var(MT &&data, VT &&true_mean)
-      -> Eigen::Matrix<Scalar,dim_dispatch_v<MT>(),dim_dispatch_v<MT>()>
+      -> Eigen::Matrix<Scalar,dim_dispatch_v<MT>,dim_dispatch_v<MT> >
     {
       return (data*data.transpose()).template cast<Scalar>()/(data.cols())
         - (true_mean * true_mean.transpose());

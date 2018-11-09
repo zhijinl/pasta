@@ -35,7 +35,7 @@
 // E-mail:   <jonathan.zj.lee@gmail.com>
 //
 // Started on  Fri Nov  2 15:29:37 2018 Zhijin Li
-// Last update Sat Nov  3 22:33:03 2018 Zhijin Li
+// Last update Fri Nov  9 23:03:46 2018 Zhijin Li
 // ---------------------------------------------------------------------------
 
 
@@ -60,7 +60,7 @@ namespace pasta
     // =====================================================================
     template<typename Kernel, int Dim>
     template<typename Tag, typename Data, typename Dom,
-             enable_if_all_t<is_eigen_v<Data>,is_pst_domain_v<Dom>()>*>
+             enable_if_all_t<is_eigen_v<Data>,is_pst_domain_v<Dom> >*>
     auto KernelSmooth<Kernel,Dim>::
     estimate(Tag tag, Data &&data, Dom &&domain) const -> estim_t<Data>
     {
@@ -71,7 +71,7 @@ namespace pasta
     // =====================================================================
     template<typename Kernel, int Dim>
     template<typename Tag, typename Data, typename Bandw,
-             enable_if_all_t<is_eigen_v<Data>, !is_pst_domain_v<Bandw>()>*>
+             enable_if_all_t<is_eigen_v<Data>, !is_pst_domain_v<Bandw> >*>
     auto KernelSmooth<Kernel,Dim>::
     estimate(Tag tag, Data &&data, Bandw &&band_width)
       const -> estim_t<Data>
@@ -97,7 +97,7 @@ namespace pasta
     // =====================================================================
     template<typename Kernel, int Dim>
     template<typename Data, typename Dom,
-             std::enable_if_t<is_pst_domain_v<Dom>()>*>
+             std::enable_if_t<is_pst_domain_v<Dom> >*>
     auto KernelSmooth<Kernel,Dim>::
     estimate_impl(Data &&data, Dom &&domain, cdf_tag_t)
       const -> estim_t<Data>
@@ -111,7 +111,7 @@ namespace pasta
     // =====================================================================
     template<typename Kernel, int Dim>
     template<typename Data, typename Dom,
-             std::enable_if_t<is_pst_domain_v<Dom>()>*>
+             std::enable_if_t<is_pst_domain_v<Dom> >*>
     auto KernelSmooth<Kernel,Dim>::
     estimate_impl(Data &&data, Dom &&domain, icdf_tag_t)
       const -> estim_t<Data>
@@ -122,7 +122,7 @@ namespace pasta
     // =====================================================================
     template<typename Kernel, int Dim>
     template<typename Data, typename Dom,
-             std::enable_if_t<is_pst_domain_v<Dom>()>*>
+             std::enable_if_t<is_pst_domain_v<Dom> >*>
     auto KernelSmooth<Kernel,Dim>::
     estimate_impl(Data &&data, Dom &&domain, pdf_tag_t)
       const -> estim_t<Data>

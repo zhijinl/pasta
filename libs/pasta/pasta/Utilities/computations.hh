@@ -35,7 +35,7 @@
 // E-mail:   <jonathan.zj.lee@gmail.com>
 //
 // Started on  Fri Nov  2 15:23:16 2018 Zhijin Li
-// Last update Sat Nov  3 23:32:41 2018 Zhijin Li
+// Last update Sat Nov 10 00:14:43 2018 Zhijin Li
 // ---------------------------------------------------------------------------
 
 
@@ -103,12 +103,12 @@ namespace pasta
     /// @param structure: the input structure.
     /// @return The number of elements inside the input structure.
     ///
-    template<typename T, std::enable_if_t<is_eigen_dynamic_vec_v<T>()>* = nullptr>
+    template<typename T, std::enable_if_t<is_eigen_dynamic_vec_v<T> >* = nullptr>
     int n_elem(T &&structure);
 
     template<typename T,
              enable_if_all_t<is_eigen_v<T>,
-                             !is_eigen_dynamic_vec_v<T>()>* = nullptr>
+                             !is_eigen_dynamic_vec_v<T> >* = nullptr>
     int n_elem(T &&structure);
     ///@}
 
@@ -176,11 +176,11 @@ namespace pasta
     /// @return The computed rotation matrix. An Eigen Dim x Dim matrix.
     ///
     template<typename AT, enable_if_all_t
-             <is_eigen_v<AT>, eigen_rows_v<AT>()==3>* = nullptr>
+             <is_eigen_v<AT>, eigen_rows_v<AT> == 3>* = nullptr>
     auto comp_rotmat(AT &&angles) -> rotmat_dispatch_t<AT>;
 
     template<typename AT, enable_if_all_t
-             <is_eigen_v<AT>, eigen_rows_v<AT>()==1>* = nullptr>
+             <is_eigen_v<AT>, eigen_rows_v<AT> == 1>* = nullptr>
     auto comp_rotmat(AT &&angle) -> rotmat_dispatch_t<AT>;
     ///@}
 
@@ -220,12 +220,12 @@ namespace pasta
     /// @return The computed angles: fixed-size Dim x 1 Eigen vec.
     ///
     template<typename MT, enable_if_all_t
-             <is_eigen_v<MT>, eigen_rows_v<MT>()==3>* = nullptr>
+             <is_eigen_v<MT>, eigen_rows_v<MT> == 3>* = nullptr>
     auto comp_rot_angles(MT &&rot_mat)
       -> mutate_col_t<eigen_mat_t<MT>,1>;
 
     template<typename MT, enable_if_all_t
-             <is_eigen_v<MT>, eigen_rows_v<MT>()==2>* = nullptr>
+             <is_eigen_v<MT>, eigen_rows_v<MT> == 2>* = nullptr>
     auto comp_rot_angles(MT &&rot_mat) -> eigen_val_t<MT>;
     ///@}
 
@@ -257,8 +257,8 @@ namespace pasta
     /// @return The computed bound: Eigen 1 x 2 point.
     ///
     template<typename Vec,
-             enable_if_any_t<is_eigen_dynamic_vec_v<Vec>(),
-                             is_eigen_fixed_row_vec_v<Vec>()>* = nullptr>
+             enable_if_any_t<is_eigen_dynamic_vec_v<Vec>,
+                             is_eigen_fixed_row_vec_v<Vec> >* = nullptr>
     auto comp_bound(Vec &&data) -> bound_dispatch_t<Vec>;
 
     /// @ingroup group_utils
@@ -270,7 +270,7 @@ namespace pasta
     /// @return The computed bound in form of a Dim by 2 mat / point.
     ///
     template<typename MT,
-             std::enable_if_t<is_eigen_dynamic_mat_v<MT>()>* = nullptr>
+             std::enable_if_t<is_eigen_dynamic_mat_v<MT> >* = nullptr>
     auto comp_bound(MT &&data) -> bound_dispatch_t<MT>;
 
     /// @ingroup group_utils
@@ -294,7 +294,7 @@ namespace pasta
     template<typename Bound, typename Steps,
              std::enable_if_t<is_eigen_v<Steps> >* = nullptr>
     auto comp_bound_discrete_size(Bound &&bound, Steps &&steps)
-      -> Eigen::Matrix<int,dim_dispatch_v<Steps>(),1>;
+      -> Eigen::Matrix<int,dim_dispatch_v<Steps>,1>;
 
     /// @ingroup group_utils
     ///

@@ -35,7 +35,7 @@
 // E-mail:   <jonathan.zj.lee@gmail.com>
 //
 // Started on  Thu Nov  1 23:58:06 2018 Zhijin Li
-// Last update Sat Nov  3 23:31:36 2018 Zhijin Li
+// Last update Fri Nov  9 23:13:17 2018 Zhijin Li
 // ---------------------------------------------------------------------------
 
 
@@ -67,7 +67,7 @@ namespace pasta
                <std::is_arithmetic_v<std::decay_t<VT> > >* = nullptr>
       bool operator()(VT &&) const { return false; }
 
-      template<typename VT, std::enable_if_t<is_pst_distr_v<VT>()>* = nullptr>
+      template<typename VT, std::enable_if_t<is_pst_distr_v<VT> >* = nullptr>
       bool operator()(VT &&) const { return true; }
     };
 
@@ -88,7 +88,7 @@ namespace pasta
                <std::is_arithmetic_v<std::decay_t<VT> > >* = nullptr>
       void operator()(VT &&) const {}
 
-      template<typename VT, std::enable_if_t<is_pst_distr_v<VT>()>* = nullptr>
+      template<typename VT, std::enable_if_t<is_pst_distr_v<VT> >* = nullptr>
       void operator()(VT &&rv) const { rv.reset_state(); }
     };
 
@@ -125,11 +125,11 @@ namespace pasta
     ///
     template<typename T> struct draw_val
     {
-      template<typename VT, std::enable_if_t<!is_pst_distr_v<VT>()>* = nullptr>
+      template<typename VT, std::enable_if_t<!is_pst_distr_v<VT> >* = nullptr>
       T operator()(VT &&) const
       { throw err::exception(std::string("err: draw_val expects randvar.\n")); }
 
-      template<typename VT, std::enable_if_t<is_pst_distr_v<VT>()>* = nullptr>
+      template<typename VT, std::enable_if_t<is_pst_distr_v<VT> >* = nullptr>
       T operator()(VT &&operand) const { return operand.draw(); }
     };
 
@@ -150,7 +150,7 @@ namespace pasta
     template<typename T>
     struct rndvar_sampler<T,true>
     {
-      template<typename Var, std::enable_if_t<is_pst_distr_v<Var>()>* = nullptr>
+      template<typename Var, std::enable_if_t<is_pst_distr_v<Var> >* = nullptr>
       T operator()(Var &&operand) const { return operand.draw(); }
 
       template<typename Var,
@@ -158,10 +158,10 @@ namespace pasta
       T operator()(Var &&operand) const { return operand; }
 
       template<typename Var, enable_if_all_t
-               <!std::is_arithmetic_v<Var>, !is_pst_distr_v<Var>()>* = nullptr>
+               <!std::is_arithmetic_v<Var>, !is_pst_distr_v<Var> >* = nullptr>
       T operator()(Var &&operand) const
       {
-        static_assert(std::is_arithmetic_v<Var> || is_pst_distr_v<Var>(),
+        static_assert(std::is_arithmetic_v<Var> || is_pst_distr_v<Var>,
                       "ERR: THE VARIANT MUST BE SCALAR OR RANDOM VAR.");
         return -1;
       }
@@ -191,7 +191,7 @@ namespace pasta
 
       rndvar_sampler(Output &output): _output( output ) {}
 
-      template<typename Var, std::enable_if_t<is_pst_distr_v<Var>()>* = nullptr>
+      template<typename Var, std::enable_if_t<is_pst_distr_v<Var> >* = nullptr>
       void operator()(Var &&operand) const { operand.draw(_output); }
 
       template<typename Var,
@@ -205,7 +205,7 @@ namespace pasta
       }
 
       template<typename Var, enable_if_all_t
-               <!std::is_arithmetic_v<Var>, !is_pst_distr_v<Var>()>* = nullptr>
+               <!std::is_arithmetic_v<Var>, !is_pst_distr_v<Var> >* = nullptr>
       void operator()(Var &&operand) const
       {
         static_assert(std::is_arithmetic_v<Var> || is_pst_distr_v<Var>(),
@@ -224,7 +224,7 @@ namespace pasta
 
     template<typename Var, typename Output,
              typename = std::enable_if_t
-             <is_variant_of_v<Var,pst_id_list::PASTA_RANDOM_VAR>()> >
+             <is_variant_of_v<Var,pst_id_list::PASTA_RANDOM_VAR> > >
     void sample_var(Var &&var, Output &output)
     {
       std::visit
@@ -233,7 +233,7 @@ namespace pasta
 
     template<typename Scalar, typename Var,
              typename = std::enable_if_t
-             <is_variant_of_v<Var,pst_id_list::PASTA_RANDOM_VAR>()> >
+             <is_variant_of_v<Var,pst_id_list::PASTA_RANDOM_VAR> > >
     Scalar sample_var(Var &&var)
     {
       return std::visit
@@ -241,8 +241,8 @@ namespace pasta
     }
 
     template<typename Output, typename Var, typename ...Sizes,
-             enable_if_all_t<is_variant_of_v<Var,pst_id_list::PASTA_RANDOM_VAR>(),
-                             not_empty<Sizes...>()>* = nullptr>
+             enable_if_all_t<is_variant_of_v<Var,pst_id_list::PASTA_RANDOM_VAR>,
+                             not_empty_v<Sizes...> >* = nullptr>
     Output sample_var(Var &&var, Sizes ...sizes)
     {
       Output __result(sizes...);

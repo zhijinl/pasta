@@ -35,7 +35,7 @@
 // E-mail:   <jonathan.zj.lee@gmail.com>
 //
 // Started on  Fri Nov  2 22:22:45 2018 Zhijin Li
-// Last update Sat Nov  3 21:06:39 2018 Zhijin Li
+// Last update Fri Nov  9 23:21:02 2018 Zhijin Li
 // ---------------------------------------------------------------------------
 
 
@@ -324,7 +324,7 @@ namespace pasta
     auto make_discrete_domain(Data && data,
                               Params &&sizes,
                               double scale=1)
-      -> dom::DiscreteDom<Scalar,dim_dispatch_v<Params>()>;
+      -> dom::DiscreteDom<Scalar,dim_dispatch_v<Params> >;
 
   } //!utils
 

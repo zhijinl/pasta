@@ -35,7 +35,7 @@
 // E-mail:   <jonathan.zj.lee@gmail.com>
 //
 // Started on  Fri Nov  2 17:43:39 2018 Zhijin Li
-// Last update Sat Nov  3 14:28:01 2018 Zhijin Li
+// Last update Thu Nov  8 22:16:09 2018 Zhijin Li
 // ---------------------------------------------------------------------------
 
 
@@ -144,9 +144,9 @@ int main()
   auto __tmp_asc = pasta::utils::ascend_indexing(fixed_int_vec);
   auto __tmp_des = pasta::utils::descend_indexing(fixed_int_vec);
 
-  if( pasta::eigen_cols_v<decltype(__tmp_cum)>() != 10 ||
-      pasta::eigen_cols_v<decltype(__tmp_asc)>() != 10 ||
-      pasta::eigen_cols_v<decltype(__tmp_des)>() != 10 )
+  if( pasta::eigen_cols_v<decltype(__tmp_cum)> != 10 ||
+      pasta::eigen_cols_v<decltype(__tmp_asc)> != 10 ||
+      pasta::eigen_cols_v<decltype(__tmp_des)> != 10 )
   {
     std::cerr << "something went wrong with fixed size propagation..\n";
     return 1;
