@@ -1,3 +1,7 @@
+2022-08-22  Zhijin Li  <jonathan.zj.lee@gmail.com>
+
+	* configure.ac: Add auto extension append for windows build.
+
 2018-11-10  Zhijin Li  <jonathan.zj.lee@gmail.com>
 
 	* libs/pasta/pasta/Core/meta.hh: Change constexpr value functions

@@ -33,7 +33,7 @@
 ## E-mail:   <jonathan.zj.lee@gmail.com>
 ##
 ## Started on  Fri Nov  2 16:57:16 2018 Zhijin Li
-## Last update Fri Nov  9 23:06:12 2018 Zhijin Li
+## Last update Mon Aug 22 14:12:51 2022 Zhijin Li
 ## ---------------------------------------------------------------------------
 
 
@@ -100,6 +100,44 @@ AC_C_INLINE
 # Checks for library functions.
 AC_FUNC_CLOSEDIR_VOID
 AC_CHECK_FUNCS([pow sqrt])
+
+
+################# Host OS detection
+
+# Auto add .exe extension for windows build.
+
+AC_CANONICAL_HOST # AC_CANONICAL_HOST is needed to access the 'host_os' variable
+
+build_linux=no
+build_windows=no
+build_mac=no
+
+# Detect the target system
+case "${host_os}" in
+    linux*)
+        build_linux=yes
+        ;;
+    cygwin*|mingw*)
+        build_windows=yes
+        ;;
+    darwin*)
+        build_mac=yes
+        ;;
+    *)
+        AC_MSG_ERROR(["OS $host_os is not supported"])
+        ;;
+esac
+
+# Create variable PLATFORM_EXT, pass it to automake
+# to be referenced in Makefile.am
+AM_CONDITIONAL([BUILD_WIN],[test "$build_windows" = "yes"])
+
+AM_COND_IF([BUILD_WIN],
+           AC_SUBST(PLATFORM_EXT, .exe),
+           AC_SUBST(PLATFORM_EXT))
+
+#################
+
 
 AC_CONFIG_FILES([Makefile
                  libs/Makefile

@@ -33,7 +33,7 @@
 ## E-mail:   <jonathan.zj.lee@gmail.com>
 ##
 ## Started on  Fri Nov  2 16:47:27 2018 Zhijin Li
-## Last update Sat Nov  3 11:50:11 2018 Zhijin Li
+## Last update Mon Aug 22 14:10:47 2022 Zhijin Li
 ## ---------------------------------------------------------------------------
 
 
@@ -48,7 +48,7 @@ AM_CPPFLAGS = -I$(top_srcdir)/libs/pasta
 
 sanity_%.cc: $(srcdir)/.tests.lst
 
-test_%: %
+test_%: %$(PLATFORM_EXT)
 	@$(top_srcdir)/check/run_unit_tests.sh $< ${VERBOSE}
 
 $(srcdir)/.tests.lst: $(top_srcdir)/configure $(LIBPASTAPATH)/pasta/*.hh
